@@ -292,7 +292,7 @@ body, html {
 }
 
 #filter-products-title {
-    padding: 15px;
+    padding: 10%;
 }
 
 .filter-products-content {
@@ -306,7 +306,7 @@ body, html {
 }
 
 #filter-products-title {
-    width: 87%;
+    width: 80%;
     border-bottom: 2px solid dimgrey;
 }
 
