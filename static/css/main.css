@@ -326,12 +326,12 @@ body, html {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 }
 
 .product-item-image {
-    margin: 10px;
+    margin: 20px 10px 5px;
     max-width: 90%;
     height: auto;
 }
