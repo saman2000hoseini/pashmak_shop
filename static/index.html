@@ -8,6 +8,12 @@
     <link href="css/main.css" rel="stylesheet">
     <link href="css/responsive.css" rel="stylesheet">
     <link href="css/alert.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link href="css/range-slider.css" rel="stylesheet">
+    <script src="js/range_slider.js"></script>
+    <script src="js/main.js"></script>
 </head>
 <body>
 <div id="main-window">
@@ -65,16 +71,30 @@
                 </ul>
             </div>
             <div id="product-items">
-                <div id="filter-products">
-                    <div id="filter-products-title" class="filter-products-content">دسته بندی‌ها</div>
-                    <label class="filter-products-content">
-                        <input type="checkbox" value="electronics" class="filter-products-checkbox">
-                        الکترونیکی
-                    </label>
-                    <label class="filter-products-content">
-                        <input type="checkbox" value="appliance" class="filter-products-checkbox">
-                        لوازم خانگی
-                    </label>
+                <div id="filter-container">
+                    <div class="filter-products">
+                        <div class="filter-products-content filter-products-title">دسته بندی‌ها</div>
+                        <label class="filter-products-content">
+                            <input type="checkbox" value="electronics" class="filter-products-checkbox">
+                            الکترونیکی
+                        </label>
+                        <label class="filter-products-content">
+                            <input type="checkbox" value="appliance" class="filter-products-checkbox">
+                            لوازم خانگی
+                        </label>
+                    </div>
+                    <div class="filter-products">
+                        <div class="filter-products-content filter-products-title">محدوده قیمت</div>
+                        <div id="price-range-container">
+                            <div id="slider-range" class="slider"></div>
+                            <div id="range-slider-price-container">
+                                <label for="min-range" class="value">از</label>
+                                <input disabled readonly type="text" id="min-range" class="value">
+                                <label for="max-range" class="value">تا</label>
+                                <input disabled readonly type="text" id="max-range" class="value">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="products">
                     <div class="product-item">
