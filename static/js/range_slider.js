@@ -16,8 +16,8 @@ $(function () {
         }
     });
 
-    $("#min-range").val(toPrice($("#slider-range").slider("values", 1) * -1));
-    $("#max-range").val(toPrice($("#slider-range").slider("values", 0) * -1));
+    $("#min-range").val(toPrice(getLowerPriceBound()));
+    $("#max-range").val(toPrice(getHigherPriceBound()));
 
     $('.value:input')
         // event handler
@@ -26,6 +26,13 @@ $(function () {
         .each(resizeInput);
 });
 
+function getLowerPriceBound() {
+    return $("#slider-range").slider("values", 1) * -1;
+}
+
+function getHigherPriceBound() {
+    return $("#slider-range").slider("values", 0) * -1;
+}
 
 function resizeInput() {
     $(this).attr('size', $(this).val().length + 1);

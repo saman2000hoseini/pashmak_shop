@@ -200,6 +200,7 @@ body, html {
 }
 
 #hero-header-input {
+    outline: none;
     border: none;
     margin: 35px auto;
     width: 60%;
