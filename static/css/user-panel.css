@@ -7,7 +7,7 @@ th, td {
 }
 
 th {
-    background-color: #3e3e3e;
+    background-color: cornflowerblue;
     color: white;
 }
 
@@ -23,16 +23,7 @@ tr:hover {
     color: black;
 }
 
-.user-panel {
-    min-height: 100vh;
-    max-height: 100vh;
-    min-width: 100vw;
-    max-width: 100vw;
-    background-size: cover;
-    overflow: hidden;
-    border: none;
-    background-repeat: no-repeat;
-}
+html, body {margin: 0; height: 100%; overflow: hidden}
 
 #main-menu {
     background: whitesmoke;
@@ -46,11 +37,11 @@ tr:hover {
     align-items: stretch;
     justify-content: stretch;
     grid-template-columns: 2fr 7fr 2fr;
-    grid-template-rows: 3fr 4fr 3fr;
-    row-gap: 30px;
+    grid-template-rows: 3fr 3fr 2fr;
+    row-gap: 10px;
 }
 
-#user-panel-title {
+#panel-header {
     color: cornflowerblue;
     display: flex;
     flex-direction: column;
@@ -62,6 +53,7 @@ tr:hover {
     grid-row-start: 1;
     grid-row-end: 2;
     justify-content: flex-end;
+    align-content: center;
 }
 
 #profile-container {
@@ -106,7 +98,7 @@ tr:hover {
 }
 
 .tablinks:hover {
-    background-color: #ddd;
+    background-color: #c9c9c9;
 }
 
 .tablinks.active {
@@ -115,6 +107,29 @@ tr:hover {
 }
 
 .tab-content {
+}
+
+#admin-tab {
+    margin: 10px;
+}
+
+#admin {
+    display: none;
+    height: fit-content;
+}
+
+#admin-panel-button-container {
+    justify-self: flex-end;
+}
+
+.search-order-id {
+    margin: 10px;
+    display: flex;
+    direction: rtl;
+    justify-content: center;
+    justify-self: stretch;
+    align-content: stretch;
+    font-size: 20px;
 }
 
 .user-panel-contents {
@@ -128,8 +143,36 @@ tr:hover {
     grid-row-end: 3;
 }
 
+.admin-panel-contents {
+    height: 100%;
+    justify-self: stretch;
+    justify-content: center;
+    align-self: stretch;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#products-management {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 4;
+}
+
+.product-amount {
+    margin-right: 215px;
+    margin-top: -10px;
+    padding: 10px;
+    position: absolute;
+    z-index: 10;
+    background: cornflowerblue;
+    border-radius: 50%;
+}
+
 .user-panel-item {
-    margin: 10px;
+    margin: 5px;
     display: flex;
     direction: rtl;
     justify-content: center;
@@ -162,6 +205,10 @@ tr:hover {
     border: none;
 }
 
+#order-id {
+    justify-self: stretch;
+}
+
 #user-panel-login {
     direction: rtl;
     display: flex;
@@ -187,6 +234,21 @@ tr:hover {
     margin: 0;
     border-radius: 0 15px 15px 0;
     border-left: none;
+}
+
+#products-tab {
+    margin: 0;
+    border-radius: 0 15px 15px 0;
+    border-left: none;
+}
+
+#categories-tab {
+    margin: 0;
+}
+
+#categories-tab:active {
+    border-left: none;
+    border-right: none;
 }
 
 #receipts-tab {
@@ -219,7 +281,13 @@ tr:hover {
     height: 30vh;
 }
 
-#receipt-rows {
+#categories {
+    display: none;
+    overflow: scroll;
+    height: 30vh;
+}
+
+.admin-table, #receipt-rows {
     direction: rtl;
     width: 100%;
     height: auto;
@@ -227,6 +295,24 @@ tr:hover {
 
 .receipt-row {
     height: 50px;
+}
+
+.category-row {
+    height: 50px;
+    color: black;
+}
+
+.category-edit-button {
+    background: inherit;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 0 15px;
+    cursor: pointer;
+}
+
+.category-edit-button:hover {
+    background:  rgb(129, 0, 0);
+    color: whitesmoke;
 }
 
 #profile-password {
@@ -237,6 +323,7 @@ tr:hover {
 #user-panel-address {
     grid-row: 3/4;
     grid-column: 1/3;
+    padding: 20px 0;
     align-items: stretch;
     align-self: stretch;
 }
@@ -268,4 +355,20 @@ tr:hover {
     grid-column-end: 3;
     grid-row-start: 3;
     grid-row-end: 4;
+}
+
+#admin-panel-button {
+    height: fit-content;
+    margin: 0;
+    direction: rtl;
+    font-size: 16px;
+}
+
+#new-product {
+    background: cornflowerblue;
+    margin: 10px;
+}
+
+#new-product:hover {
+    background-color: rgb(129, 0, 0);
 }
