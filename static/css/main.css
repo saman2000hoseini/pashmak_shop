@@ -33,7 +33,7 @@ body, html {
     max-height: 65px;
     align-self: flex-start;
     /*border: solid black 3px;*/
-
+    background: #dedddd;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
