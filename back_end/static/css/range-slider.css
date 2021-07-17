@@ -1,0 +1,41 @@
+#price-range-container {
+    height: 100px;
+    width: 100%;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    alignment: center;
+    justify-content: flex-start;
+    justify-items: center;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.slider {
+    /*direction: rtl;*/
+    width: 85%;
+    margin: 10px;
+}
+
+#range-slider-price-container {
+    height: fit-content;
+    flex-wrap: nowrap;
+    direction: rtl;
+    display: flex;
+    width: 90%;
+    justify-self: center;
+    justify-items: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.value {
+    border: none;
+    background: none;
+    margin: 5px 0;
+    text-align: center;
+    width: fit-content;
+    color: #333;
+    font-family: 'byekan', 'Yekan', 'B Yekan', serif;
+}

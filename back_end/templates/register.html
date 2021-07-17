@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ثبت نام | فروشگاه اینترنتی پشمک شاپ</title>
+  <link rel="icon" href="./img/logo.png" type="image/icon type">
+  <link href="css/font.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+  <link href="css/responsive.css" rel="stylesheet">
+  <link href="css/user-panel.css" rel="stylesheet">
+ 
+</head>
+<body id="user-panel">
+<div id="main-window">
+  <div id="main-menu">
+    <div id="menu-items">
+      <div id="menu-shop-item" class="menu-item">
+        <img id="menu-shop-logo-item" src="img/logo.png" alt="لوگو">
+        <div>پشمک شاپ</div>
+      </div>
+      <div class="menu-item">صفحه اصلی</div>
+      <div class="menu-item">محصولات</div>
+      <div class="menu-item">پشتیبانی</div>
+      <div class="menu-item">تماس با ما</div>
+    </div>
+    <div id="menu-user">
+      <div id="menu-user-button" class="unauthorized">
+        ورود / ثبت نام
+      </div>
+    </div>
+  </div>
+  <div id="user-panel-container">
+    <div id="panel-header" class="awesome-title">
+      <div>
+        فروشگاه - ثبت نام
+      </div>
+    </div>
+    <div id="user-panel-register" class="user-panel-contents">
+      <div class="user-panel-item">
+        <label for="name" class="user-panel-label">نام</label>
+        <input id="name" class="user-panel-input persian-text" type="text" placeholder="نام خود را وارد کنید">
+      </div>
+      <div class="user-panel-item">
+        <label for="family" class="user-panel-label">نام خانوادگی</label>
+        <input id="family" class="user-panel-input persian-text" type="text" placeholder="نام خانوادگی خود را وارد کنید">
+      </div>
+      <div class="user-panel-item">
+        <label for="email" class="user-panel-label">ایمیل</label>
+        <input id="email" class="user-panel-input english-text" type="email" placeholder="example@pashmak.com">
+      </div>
+      <div class="user-panel-item">
+        <label for="password" class="user-panel-label">رمز عبور</label>
+        <input id="password" class="user-panel-input english-text" type="password" placeholder="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
+      </div>
+      <div id="user-panel-address" class="user-panel-item">
+        <label id="address-label" for="address" class="user-panel-label">آدرس</label>
+        <textarea id="address" class="user-panel-input persian-text" placeholder="آدرس خود را وارد کنید">
+        </textarea>
+      </div>
+	  <div id="message"></div>
+    </div>
+    <div id="user-panel-button">
+      <button id= "submit" class="awesome-button">ثبت نام</button>
+    </div>
+  </div>
+  <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+  <div id="modal-container" class="modal">
+		<div id="modal-content">
+			<button class="close" >&times;</button>
+		</div>
+   </div>
+</div>
+ <script src="js/register-validation.js"></script>
+</body>
+</html>

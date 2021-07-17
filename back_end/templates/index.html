@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pashmak Shop</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/range-slider.css' %}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="{% static 'js/range_slider.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+    
+    function search(event,id){
+        if(event.keyCode === 13){
+                let product_name = document.getElementById(id).value;
+                $.ajax({
+                    type:'POST',
+                    url:"{% url 'product_search' %}" ,
+                    data:
+                        JSON.stringify({ 
+                        search : product_name
+                        }),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success:function(response){
+                        $("#products").html(response)
+                    },
+                });
+        }
+    }
+        function product_sort(s_sort) {
+
+        f_sort = null;
+        f_elemnt = document.getElementsByClassName('sort-item-input');
+        for (i=0;i<f_elemnt.length;i++){
+            if(f_elemnt[i].checked == true){
+                f_sort = i
+                console.log(i)
+            }
+        }
+        if(f_sort == null){
+            f_sort = "none";
+        }
+
+        lower_price = getLowerPriceBound()
+        higher_price = getHigherPriceBound()
+
+        if(s_sort == null){
+            s_sort = "none";
+        }
+
+        $.ajax({
+                type:'POST',
+                url:"{% url 'product_sort' %}" ,
+                data:
+                    JSON.stringify({ 
+                    sort_item : f_sort,
+                    sort_category : s_sort,
+                    lower_price : lower_price,
+                    higher_price : higher_price
+                    }),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success:function(response){
+                    $("#products").html(response)
+                },
+            });
+
+    };     
+    </script>
+</head>
+<body>
+<div id="main-window">
+    <div id="main-menu">
+        <div id="menu-items">
+            <div id="menu-shop-item" class="menu-item">
+                <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
+                <div>پشمک شاپ</div>
+            </div>
+            <div class="menu-item"><a href = "/">صفحه اصلی</a></div>
+            <div class="menu-item"><a href = "/#product-items-container">محصولات</a></div>
+            <div class="menu-item">پشتیبانی</div>
+            <div class="menu-item">تماس با ما</div>
+        </div>
+        <div id="menu-user">
+            <!--            <div id="menu-user-button" class="unauthorized">-->
+            <!--                ورود / ثبت نام-->
+            <!--            </div>-->
+            <div id="menu-user-dropdown" class="menu-dropdown">
+                <div id="dropdown-sign">⌵</div>
+                شیرین عبادی
+            </div>
+            <div class="dropdown-content">
+                <a id="dropdown-profile" href="javascript:void(0)">پروفایل</a>
+                <a href="javascript:void(0)">خروج</a>
+            </div>
+        </div>
+    </div>
+    <div id="contents">
+        <div id="hero-header" class = "mySlides">
+			<div id="hero-header-title1" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input id="hero-header-input1" class="persian-text" onkeypress="search(event,id)" placeholder="نام محصول خود را وارد کنید"/>
+            <button id="hero-header-button1" class="awesome-button">جستجو</button>
+            <img src="{% static 'img/2.jpg' %}">
+		</div>
+		<div id="pashmak-header" class = "mySlides">
+			<div id="hero-header-title2" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input id="hero-header-input2" class="persian-text" onkeypress="search(event,id)" placeholder="نام محصول خود را وارد کنید"/>
+            <button id="hero-header-button2" class="awesome-button">جستجو</button>
+            <img src="{% static 'img/1.jpg' %}">
+		</div>
+		<div id="ice-cream-header" class = "mySlides">
+			<div id="hero-header-title3" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input id="hero-header-input3" class="persian-text" onkeypress="search(event,id)" placeholder="نام محصول خود را وارد کنید"/>
+            <button id="hero-header-button3" class="awesome-button">جستجو</button>
+            <img src="{% static 'img/3.png' %}">
+		</div>
+			
+		<a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+		<a class="next" onclick="buttonSlides(1)">&#10095;</a>
+			
+			
+       
+        <div id="product-items-container">
+            <div id="sort-items-container">
+                <div id="sort-title-item">مرتب سازی بر اساس:</div>
+                <ul id="sort-items-list">
+                    <li class="sort-item">
+                        <input type='radio' value='1' name='sort_products' id='radio-best-sell'
+                               class="sort-item-input" onchange="product_sort()"/>
+                        <label for='radio-best-sell' class="sort-item-button">بیشترین فروش</label>
+                    </li>
+                    <li class="sort-item">
+                        <input type='radio' value='2' name='sort_products' id='radio-highest-price'
+                               class="sort-item-input" onchange="product_sort()"/>
+                        <label for='radio-highest-price' class="sort-item-button">بیشترین قیمت</label>
+                    </li>
+                    <li class="sort-item">
+                        <input type='radio' value='3' name='sort_products' id='radio-lowest-price'
+                               class="sort-item-input" onchange="product_sort()"/>
+                        <label for='radio-lowest-price' class="sort-item-button">کمترین قیمت</label>
+                    </li>
+                </ul>
+            </div>
+            <div id="product-items">
+                <div id="filter-container">
+                    <div class="filter-products">
+                        <div class="filter-products-content filter-products-title">دسته بندی‌ها</div>
+                        {% for category in categories_list %}
+                            <label class="filter-products-content">
+                                <input type="checkbox" onchange="product_sort('{{category.c_name}}')" id = "{{category.c_name}}" class="filter-products-checkbox">
+                                {{category.c_name}}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <div class="filter-products">
+                        <div class="filter-products-content filter-products-title">محدوده قیمت</div>
+                        <div id="price-range-container">
+                            <div id="slider-range" class="slider"></div>
+                            <div id="range-slider-price-container">
+                                <label for="min-range" class="value">از</label>
+                                <input disabled readonly onchange="product_sort()" type="text" id="min-range" class="value">
+                                <label for="max-range" class="value">تا</label>
+                                <input disabled readonly onchange="product_sort()" type="text" id="max-range" class="value">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="products">
+                    <div id = "paginator_items"></div>
+                    {% for product in products_list%}
+                        <div class="product-item">
+                            <div class="product-item-container">
+                                <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
+                                <label class="product-item-name">{{product.p_name}}</label>
+                                <label class="product-item-group">{{product.category}}</label>
+                                <div class="price-actions">
+                                    <label class="product-item-price">{{peoduct.price}}</label>
+                                    <button class="product-item-buy">خرید</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}  
+                    <div class = "paginator-buttons"></div>   
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+</div>
+<div id="notifier" class="notify"><span id="notifyType" class=""></span></div>
+<script src="{% static 'js/background-slider.js' %}"></script>
+<script src="{% static 'js/pagination.js' %}"></script>
+</body>
+</html>

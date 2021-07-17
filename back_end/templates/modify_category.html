@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>پنل مدیریت</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
+    <script>$(document).ready(function () {
+        $(".category-delete-button").click(function (e) {
+            var id = e.target.id
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:"{% url 'delete_category' %}" ,
+                data:
+                    JSON.stringify({ id : id}),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success:function(response){
+                    $("#categories").html(response)
+                },
+            });
+        });
+        });</script>
+        <script>$(document).ready(function () {
+            $(".category-edit-button").click(function (e) {
+                var id = e.target.id
+                e.preventDefault();
+                document.getElementById("modal-edit-category").style.display = "block";
+                $(".p_submit").click(function(){
+                    let edited_c = document.getElementById("edited_c").value
+                    console.log(edited_c);
+                    $.ajax({
+                    type:'POST',
+                    url:"{% url 'edited_category' %}" ,
+                    data:
+                        JSON.stringify({ id : id,
+                        new_c : edited_c}),
+
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success:function(response){
+                        $("#categories").html(response)
+                    },
+                });
+                document.getElementById("modal-edit-category").style.display = "none";
+            });
+
+                })
+            });</script>
+</head>
+<body>
+    <table class="admin-table">
+        <tr class="category-row">
+            <th>دسته بندی</th>
+            <th>عملیات</th>
+        </tr>
+        {% for category in categories_list %}
+        <form method="POST" id="{{ category.c_name }}"></form>
+        <tr class="category-row">
+            <td name="c_name">{{category.c_name}}</td>
+            <td>
+                <button class="category-edit-button" id = "{{category.c_name}}" >ویرایش</button>
+                <button class="category-delete-button" id = "{{category.c_name}}">X حذف</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div id="modal-edit-category" class="modal">
+		<div id="modal-content-edit-category" class="modal-content">
+			<button class="close" >&times;</button>
+                {% csrf_token %}
+                <input id = "edited_c" name="edit_form" type="text">
+                <button class = "p_submit" type= "submit" style = "margin: 10px;">Submit</button>
+		</div>
+	</div>
+<script src="{% static 'js/profile.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pashmak Shop</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link href="{% static 'css/range-slider.css' %}" rel="stylesheet">
+    <script src="{% static 'js/range_slider.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</head>
+
+{% for product in products_list%}
+<div class="product-item">
+    <div class="product-item-container">
+        <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
+        <label class="product-item-name">{{product.p_name}}</label>
+        <label class="product-item-group">{{product.category}}</label>
+        <div class="price-actions">
+            <label class="product-item-price">{{peoduct.price}}</label>
+            <button class="product-item-buy">خرید</button>
+        </div>
+    </div>
+</div>
+{% endfor %}   

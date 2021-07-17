@@ -8,25 +8,39 @@ const numberPerPage = 15;
 let currentPage = 1;
 const numberOfPages = Math.ceil(numberOfItems/numberPerPage);
 
+window.addEventListener("load",function(){
+    
+    document.getElementById(currentPage).style.backgroundColor = "cornflowerblue";
+
+    const start = (currentPage-1)*numberPerPage;
+    const end = start + numberPerPage;
+
+    pageList = list_array.slice(start, end);
+
+    document.getElementsByClassName("paginator-items")[0].innerHTML = "";
+    for (r = 0; r < pageList.length; r++) {
+        document.getElementsByClassName("paginator-items")[0].innerHTML += pageList[r] + "<br/>";
+    }
+})
 
 if(numberOfPages>1){
-    let nxt_btn = document.createElement("button"); 
-    nxt_btn.id = numberOfPages + 1;
-    nxt_btn.innerHTML = "بعد";
-    document.getElementsByClassName("paginator-buttons")[0].appendChild(nxt_btn);
+    let prv_btn = document.createElement("button"); 
+    prv_btn.id = 0;
+    prv_btn.innerHTML = "قبل";
+    document.getElementsByClassName("paginator-buttons")[0].appendChild(prv_btn);
 
-
-    for (let i=numberOfPages; i>=1; i--) {
+    for (let i=1; i<=numberOfPages; i++) {
         let btn = document.createElement("button");
         btn.id = i;
         btn.innerHTML = i;
         document.getElementsByClassName("paginator-buttons")[0].appendChild(btn);
     }
 
-    let prv_btn = document.createElement("button"); 
-    prv_btn.id = 0;
-    prv_btn.innerHTML = "قبل";
-    document.getElementsByClassName("paginator-buttons")[0].appendChild(prv_btn);
+    let nxt_btn = document.createElement("button"); 
+    nxt_btn.id = numberOfPages + 1;
+    nxt_btn.innerHTML = "بعد";
+    document.getElementsByClassName("paginator-buttons")[0].appendChild(nxt_btn);
+
 
     for (let i=0; i<=numberOfPages+1; i++) {
         document.getElementById(i).style.border = "none";
@@ -38,9 +52,9 @@ if(numberOfPages>1){
 
  
 function loadPage(event){
-    target = event.target 
 
-        console.log(target.id)
+    target = event.target ;
+
     for (let i=0; i<=numberOfPages+1; i++) {
         document.getElementById(i).style.backgroundColor = "white";
     }

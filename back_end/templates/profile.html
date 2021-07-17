@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>فضای کاربری</title>
+    <link rel="icon" href="./img/logo.png" type="image/icon type">
+    <link href="css/font.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <link href="css/user-panel.css" rel="stylesheet">
+    <script src="js/profile.js"></script>
+</head>
+<body id="user-panel">
+<div id="main-window">
+    <div id="main-menu">
+        <div id="menu-items">
+            <div id="menu-shop-item" class="menu-item">
+                <img id="menu-shop-logo-item" src="img/logo.png" alt="لوگو">
+                <div>پشمک شاپ</div>
+            </div>
+            <div class="menu-item">صفحه اصلی</div>
+            <div class="menu-item">محصولات</div>
+            <div class="menu-item">پشتیبانی</div>
+            <div class="menu-item">تماس با ما</div>
+        </div>
+        <div id="menu-user">
+            <div id="menu-user-dropdown" class="menu-dropdown">
+                <div id="dropdown-sign">⌵</div>
+                <div id="user-full-name">شیرین عبادی</div>
+            </div>
+            <div class="dropdown-content">
+                <a id="dropdown-profile" href="javascript:void(0)">پروفایل</a>
+                <a href="javascript:void(0)">خروج</a>
+            </div>
+        </div>
+    </div>
+    <div id="user-panel-container">
+        <div id="panel-header" class="awesome-title">
+            <div id="profile-container">
+                <div id="user-name" class="profile-item">
+                    شیرین
+                </div>
+                <div class="profile-item">عزیز، خوش آمدید.</div>
+                <div class="profile-item profile-tab tab-content">موجودی حساب شما:</div>
+                <div class="profile-item profile-tab tab-content">
+                    ۵٫۰۰۰٫۰۰۰
+                </div>
+                <button id="profile-increase-credit" class="awesome-button profile-tab tab-content">افزایش موجودی
+                </button>
+            </div>
+            <div class="tab">
+                <button id="profile-tab" class="tablinks active" onclick="switchTab(this, 'profile-tab')">پروفایل</button>
+                <button id="receipts-tab" class="tablinks" onclick="switchTab(this, 'receipt-tab')">رسیدها</button>
+            </div>
+        </div>
+        <div id="profile" class="user-panel-contents tab-content profile-tab">
+            <div id="profile-items">
+                <div class="user-panel-item">
+                    <label for="name" class="user-panel-label">نام</label>
+                    <input id="name" class="user-panel-input persian-text" type="text"
+                           placeholder="نام خود را وارد کنید">
+                </div>
+                <div class="user-panel-item">
+                    <label for="family" class="user-panel-label">نام خانوادگی</label>
+                    <input id="family" class="user-panel-input persian-text" type="text"
+                           placeholder="نام خانوادگی خود را وارد کنید">
+                </div>
+                <div id="profile-password" class="user-panel-item">
+                    <label for="password" class="user-panel-label">رمز عبور</label>
+                    <input id="password" class="user-panel-input english-text" type="password" placeholder="password"
+                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
+                </div>
+                <div id="user-panel-address" class="user-panel-item">
+                    <label id="address-label" for="address" class="user-panel-label">آدرس</label>
+                    <textarea id="address" class="user-panel-input persian-text"
+                              placeholder="آدرس خود را وارد کنید"></textarea>
+                </div>
+				<div id="message"></div>
+            </div>
+        </div>
+        <div id="receipts" class="user-panel-contents receipt-tab tab-content">
+            <table id="receipt-rows">
+                <tr class="receipt-row">
+                    <th>تاریخ</th>
+                    <th>کد پیگیری</th>
+                    <th>کالا</th>
+                    <th>هزینه پرداختی</th>
+                    <th>آدرس</th>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+            </table>
+        </div>
+        <div id="user-panel-button-container" class="tab-content profile-tab">
+            <div id="user-panel-button">
+                <button id = "modify" class="awesome-button" >ویرایش اطلاعات</button>
+            </div>
+        </div>
+    </div>
+    <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+	<div id="modal-container" class="modal">
+		<div id="modal-content">
+			<button class="close" >&times;</button>
+		</div>
+    </div>
+</div>
+<script src="js/profile-validation.js"></script>
+</body>
+</html>

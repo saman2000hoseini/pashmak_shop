@@ -1,0 +1,280 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>پنل مدیریت</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>$(document).ready(function () {
+        $(".category-delete-button").click(function (e) {
+            var id = e.target.id
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:"{% url 'delete_category' %}" ,
+                data:
+                    JSON.stringify({ id : id}),
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success:function(response){
+                    $("#categories").html(response)
+                },
+            });
+        });
+        $(".category-edit-button").click(function (e) {
+                var id = e.target.id
+                e.preventDefault();
+                document.getElementById("modal-edit-category").style.display = "block";
+                $(".p_submit").click(function(){
+                    let edited_c = document.getElementById("edited_c").value
+                    console.log(edited_c);
+                    $.ajax({
+                    type:'POST',
+                    url:"{% url 'edited_category' %}" ,
+                    data:
+                        JSON.stringify({ id : id,
+                        new_c : edited_c}),
+
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success:function(response){
+                        $("#categories").html(response)
+                    },
+                });
+                document.getElementById("modal-edit-category").style.display = "none";
+            });
+
+                })
+                $(".category-edit-button").click(function (e) {
+                    var id = e.target.id
+                    e.preventDefault();
+
+                    $("#order-id").on('keyup',function(e){
+                        if (e.key === 'Enter'){
+
+                            let code = document.getElementById("order-id").value
+                            console.log(edited_c);
+                            $.ajax({
+                            type:'POST',
+                            url:"{% url 'search_receipts' %}" ,
+                            data:
+                                JSON.stringify({ id : code}),
+        
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                            },
+                            success:function(response){
+                                $("#receipts").html(response)
+                            },
+                        });
+                    }
+                });
+    
+                    })
+        });</script>
+      
+</head>
+<body id="user-panel">
+<div id="main-window">
+    <div id="main-menu">
+        <div id="menu-items">
+            <div id="menu-shop-item" class="menu-item">
+                <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
+                <div>پشمک شاپ</div>
+            </div>
+            <div class="menu-item"><a href = "/">صفحه اصلی</a></div>
+            <div class="menu-item"><a href = "/#product-items-container"> محصولات</a></div>
+            <div class="menu-item">پشتیبانی</div>
+            <div class="menu-item">تماس با ما</div>
+        </div>
+        <div id="menu-user">
+            <div id="menu-user-dropdown" class="menu-dropdown">
+                <div id="dropdown-sign">⌵</div>
+                شیرین عبادی
+            </div>
+            <div class="dropdown-content">
+                <a id="dropdown-profile" href="javascript:void(0)">پروفایل</a>
+                <a href="javascript:void(0)">خروج</a>
+            </div>
+        </div>
+    </div>
+    <div id="user-panel-container">
+        <div id="panel-header" class="awesome-title">
+            <div id="profile-container">
+                <div class="profile-item">
+                    ادمین
+                </div>
+                <div class="profile-item">عزیز، خوش آمدید.</div>
+            </div>
+            <div id="admin-tab" class="tab">
+                <button id="products-tab" class="tablinks active" onclick="switchTab(this, 'products-tab')">لیست کالاها
+                </button>
+                <button id="categories-tab" class="tablinks" onclick="switchTab(this, 'categories-tab')">دسته‌ها
+                </button>
+                <button id="receipts-tab" class="tablinks" onclick="switchTab(this, 'receipt-tab')">رسیدها</button>
+            </div>
+            <div id="admin" class="user-panel-contents tab-content receipt-tab">
+                <div class="search-order-id">
+                    <label for="order-id" class="user-panel-label">کد پیگیری</label>
+                    <input id="order-id" class="user-panel-input persian-text" type="text"
+                           placeholder="کد پیگیری را وارد کنید">
+                </div>
+            </div>
+            <div id="admin-panel-button-container" class="tab-content products-tab">
+                <div id="admin-panel-button">
+                    <button id="new-product" class="awesome-button" onclick="modal_view()"> ایجاد محصول جدید</button>
+                </div>
+            </div>
+        </div>
+        <div id="receipts" class="admin-panel-contents receipt-tab tab-content">
+            <table id="receipt-rows">
+                <tr class="receipt-row">
+                    <th>تاریخ</th>
+                    <th>خریدار</th>
+                    <th>کد پیگیری</th>
+                    <th>کالا</th>
+                    <th>هزینه پرداختی</th>
+                    <th>آدرس</th>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>سامان حسینی</td>
+                    <td>1234567890</td>
+                    <td>موس</td>
+                    <td>500,000</td>
+                    <td>قزوین، خیابان فلان، کوچه مسعود</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+                <tr class="receipt-row">
+                    <td>1400/04/16</td>
+                    <td>شیرین عبادی</td>
+                    <td>1234567890</td>
+                    <td>موس گیمینگ</td>
+                    <td>500,000,000</td>
+                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                </tr>
+            </table>
+        </div>
+        <div id="categories" class="admin-panel-contents categories-tab tab-content">
+            <table class="admin-table">
+                <tr class="category-row">
+                    <th>دسته بندی</th>
+                    <th>عملیات</th>
+                </tr>
+                {% for category in categories_list %}
+                <form method="POST" id="{{ category.c_name }}"></form>
+                <tr class="category-row">
+                    <td name="c_name">{{category.c_name}}</td>
+                    <td>
+                        <button class="category-edit-button" id = {{category.c_name}}>ویرایش</button>
+                        <button class="category-delete-button" id = "{{category.c_name}}">X حذف</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div id="products-management" class="admin-panel-contents products-tab tab-content">
+            <div id="products">
+                {% for product in products_list %}
+                    <div class="product-item">
+                        <div class="product-amount">{{product.inventory}}</div>
+                        <div class="product-item-container">
+                            <img class="product-item-image" src="{% static 'img/sample/razer2.png' %}">
+                            <label class="product-item-name">{{product.p_name}}</label>
+                            <label class="product-item-group">{{product.category}}</label>
+                            <div class="price-actions">
+                                <label class="product-item-price">{{product.proice}}</label>
+                                <button class="product-item-buy">ویرایش محصول</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}    
+            </div>
+        </div>
+    </div>
+    <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+    <div id="modal-new-product" class="modal">
+		<div id="modal-content-new-product" class="modal-content">
+			<button class="close" >&times;</button>
+            <form id = "admin_form" method="POST">
+                {% csrf_token %}
+                  {{ form }}
+                <button class = "p_submit" type="submit" style = "margin: 10px;">Submit</button>
+            </form>
+		</div>
+	</div>
+    <div id="modal-edit-category" class="modal">
+		<div id="modal-content-edit-category" class="modal-content">
+			<button class="close" >&times;</button>
+                {% csrf_token %}
+                <input id = "edited_c" name="edit_form" type="text">
+                <button class = "p_submit" type= "submit" style = "margin: 10px;">Submit</button>
+		</div>
+	</div>
+</div>
+<script src="{% static 'js/profile.js' %}"></script>
+</body>
+</html>
