@@ -8,14 +8,14 @@ from django.http import JsonResponse
 
 def index(request):
     
-    products = Product.objects.order_by('sold')
-    button_range = int(len(products)/1) + 1
-    page_list = []
-    for i in range(1,button_range+1):
-        page_list.append(i)
+    products = Product.objects.order_by('sold')[:15]
+
+    obj_paginator = Paginator(products, 15)
+    page_range = obj_paginator.page_range
+
     categories = Category.objects.all()
     
-    return render (request,'index.html',{'products_list': products, 'categories_list':categories,'page_list':page_list})
+    return render (request,'index.html',{'products_list': products, 'categories_list':categories,'page_list':page_range})
 
 def admin(request):
 
@@ -45,7 +45,6 @@ def search_receipts(request):
     receipt = Order.objects.filter(id = data['code'])
 
     return render (request,'receipts.html',{'receipts':receipt})
-
 
 
 def delete_category(request):
@@ -102,13 +101,12 @@ def product_sort(request):
             sorted_products = Product.objects.filter(category = data['sort_category'],price__gt=data['lower_price'],price__lt=data['higher_price'])
     
 
-    obj_paginator = Paginator(sorted_products, 3)
+    obj_paginator = Paginator(sorted_products, 15)
     page_range = obj_paginator.page_range
-    print(page_range)
-    
+
     results = list(obj_paginator.page(data['page']).object_list)
     
-    return render(request,'sorted_p.html',{'products_list':  results},{'page_list':  page_range})
+    return render(request,'sorted_p.html',{'products_list':  results, 'page_list':  page_range})
 
 
 
