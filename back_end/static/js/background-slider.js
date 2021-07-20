@@ -1,6 +1,8 @@
-var slideIndex = 1;
-autoSlides();
 
+window.onload = function(){
+    autoSlides();
+}
+var slideIndex = 1;
 function autoSlides() {
     let slideImages = document.getElementsByClassName("slider-img");
     for (let i = 0; i < slideImages.length; i++) {

@@ -53,6 +53,29 @@
             });
 
                 })
+                $(".category-create-button").click(function (e) {
+                e.preventDefault();
+                document.getElementById("modal-edit-category").style.display = "block";
+                $(".p_submit").click(function(){
+                    let edited_c = document.getElementById("edited_c").value
+                    console.log(edited_c);
+                    $.ajax({
+                    type:'POST',
+                    url:"{% url 'create_category' %}" ,
+                    data:
+                        JSON.stringify({new_c : edited_c}),
+
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success:function(response){
+                        $("#categories").html(response)
+                    },
+                });
+                document.getElementById("modal-edit-category").style.display = "none";
+            });
+
+                })
         $(".product-item-buy").click(function (e) {
             e.preventDefault();
             var id = e.target.id
@@ -182,6 +205,7 @@
             </table>
         </div>
         <div id="categories" class="admin-panel-contents categories-tab tab-content">
+            <button class="category-create-button">دسته بندی</button>
             <table class="admin-table">
                 <tr class="category-row">
                     <th>دسته بندی</th>

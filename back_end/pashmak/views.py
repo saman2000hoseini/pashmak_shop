@@ -132,3 +132,11 @@ def edited_product(request):
     products = Product.objects.all()
 
     return render(request, 'new_p.html', {'products_list': products})
+
+def create_category(request):
+    data = json.loads(request.body)
+
+    instance = Category(c_name=data['new_c'])
+    instance.save()
+    categories = Category.objects.all()
+    return render(request, 'modify_category.html', {'categories_list': categories})
