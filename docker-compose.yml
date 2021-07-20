@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:11.0
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_DB: pashmak-shop
+      POSTGRES_PASSWORD: 123456sh
+    ports:
+      - "5432:5432"
