@@ -23,14 +23,18 @@ tr:hover {
     color: black;
 }
 
-html, body {margin: 0; height: 100%; overflow: hidden}
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
 
 #main-menu {
     background: whitesmoke;
 }
 
 #user-panel-container {
-	overflow: auto;
+    overflow: auto;
     width: 100%;
     height: 100%;
     display: grid;
@@ -205,9 +209,9 @@ html, body {margin: 0; height: 100%; overflow: hidden}
     border-radius: 5px 0 0 5px;
 }
 
-.message{
-	margin-right: 300px;
-	position: absolute;
+.message {
+    margin-right: 300px;
+    position: absolute;
 }
 
 #order-id {
@@ -324,7 +328,7 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 }
 
 .category-edit-button:hover {
-    background:  rgb(129, 0, 0);
+    background: rgb(129, 0, 0);
     color: whitesmoke;
 }
 
@@ -387,45 +391,59 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 }
 
 .modal {
-  display: none;
-  position: fixed; 
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgba(0,0,0,0.4); 
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
-  position: relative; 
-  background-color: white;
-  padding: 20px; 
-  margin: auto;
-  margin-top:  150px;
-  width: 450px;  
-  border-radius: 25px;
-  -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.4s;
-  animation-name: animatetop;
-  animation-duration: 0.4s
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    margin: auto;
+    margin-top: 150px;
+    width: 450px;
+    border-radius: 25px;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
 }
 
 @-webkit-keyframes animatetop {
-  from {top:-100px; opacity:0} 
-  to {top:120px; opacity:1}
+    from {
+        top: -100px;
+        opacity: 0
+    }
+    to {
+        top: 120px;
+        opacity: 1
+    }
 }
+
 @keyframes animatetop {
-  from {top:-100px; opacity:0}
-  to {top:120px; opacity:1}
+    from {
+        top: -100px;
+        opacity: 0
+    }
+    to {
+        top: 120px;
+        opacity: 1
+    }
 }
 
 .close {
-  background:white;	
-  border:none;
-  color: lightgray; 
-  font-size: 24px;  
-  font-weight: bold;
+    background: white;
+    border: none;
+    color: lightgray;
+    font-size: 24px;
+    font-weight: bold;
 }
+
 .close:hover {
-  color: darkgray;
+    color: darkgray;
 }
 
