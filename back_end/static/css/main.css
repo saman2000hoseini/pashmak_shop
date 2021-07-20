@@ -482,3 +482,10 @@ body, html {
 .english-text {
     direction: ltr;
 }
+
+.paginator-buttons{
+	margin-left : 220px;
+	margin-top: 10px;
+	border: none;
+	margin-bottom: 10px;
+}

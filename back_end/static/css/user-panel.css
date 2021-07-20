@@ -429,9 +429,3 @@ html, body {margin: 0; height: 100%; overflow: hidden}
   color: darkgray;
 }
 
-.paginator-buttons{
-	margin-left : 220px;
-	margin-top: 10px;
-	border: none;
-	margin-bottom: 10px;
-}

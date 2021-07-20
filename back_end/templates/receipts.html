@@ -1,0 +1,20 @@
+<table id="receipt-rows">
+    <tr class="receipt-row">
+        <th>تاریخ</th>
+        <th>خریدار</th>
+        <th>کد پیگیری</th>
+        <th>کالا</th>
+        <th>هزینه پرداختی</th>
+        <th>آدرس</th>
+    </tr>
+    {% for r in receipts %}
+    <tr class="receipt-row">
+        <th>{{r.date}}</th>
+        <th>{{r.f_name}} {{r.s_name}}</th>
+        <th>{{r.id}}</th>
+        <th>{{r.p_name}}</th>
+        <th>{{r.price}}</th>
+        <th>{{r.address}}</th>
+    </tr>
+    {%endfor%}
+</table>

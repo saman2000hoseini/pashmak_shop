@@ -35,8 +35,7 @@
                 });
         }
     }
-        function product_sort(s_sort) {
-
+    function product_sort(page) {
         f_sort = null;
         f_elemnt = document.getElementsByClassName('sort-item-input');
         for (i=0;i<f_elemnt.length;i++){
@@ -48,13 +47,27 @@
         if(f_sort == null){
             f_sort = "none";
         }
+        
+        s_sort = null
+        s_elemnt = document.getElementsByClassName('filter-products-checkbox');
+
+        for (i=0;i<s_elemnt.length;i++){
+            if(s_elemnt[i].checked == true){
+                s_sort = s_elemnt[i].value
+            }
+        }
+        if(s_sort == null){
+            s_sort = "none";
+        }
 
         lower_price = getLowerPriceBound()
         higher_price = getHigherPriceBound()
 
-        if(s_sort == null){
-            s_sort = "none";
-        }
+      if (page == null){
+          page = 1
+      }
+
+      console.log(page)
 
         $.ajax({
                 type:'POST',
@@ -64,7 +77,8 @@
                     sort_item : f_sort,
                     sort_category : s_sort,
                     lower_price : lower_price,
-                    higher_price : higher_price
+                    higher_price : higher_price,
+                    page : page,
                     }),
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
@@ -74,7 +88,8 @@
                 },
             });
 
-    };     
+    }
+            
     </script>
 </head>
 <body>
@@ -156,7 +171,7 @@
                         <div class="filter-products-content filter-products-title">دسته بندی‌ها</div>
                         {% for category in categories_list %}
                             <label class="filter-products-content">
-                                <input type="checkbox" onchange="product_sort('{{category.c_name}}')" id = "{{category.c_name}}" class="filter-products-checkbox">
+                                <input type="checkbox" value= "{{category.c_name}}" onchange="product_sort()" class="filter-products-checkbox">
                                 {{category.c_name}}
                             </label>
                         {% endfor %}
@@ -175,7 +190,7 @@
                     </div>
                 </div>
                 <div id="products">
-                    <div id = "paginator_items"></div>
+    
                     {% for product in products_list%}
                         <div class="product-item">
                             <div class="product-item-container">
@@ -183,14 +198,20 @@
                                 <label class="product-item-name">{{product.p_name}}</label>
                                 <label class="product-item-group">{{product.category}}</label>
                                 <div class="price-actions">
-                                    <label class="product-item-price">{{peoduct.price}}</label>
+                                    <label class="product-item-price">{{product.price}} تومان </label>
                                     <button class="product-item-buy">خرید</button>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}  
-                    <div class = "paginator-buttons"></div>   
-                </div>
+                    <div class = "paginator-buttons">
+                        <button  onclick="product_sort('prv')">قبل</button> 
+                        {% for i in page_list %}
+                        <button  onclick="product_sort('{{i}}')">{{i}}</button> 
+                        {% endfor %}  
+                        <button onclick="product_sort('nxt')">بعد</button> 
+                    </div>  
+                </div>  
             </div>
         </div>
     </div>
@@ -198,6 +219,6 @@
 </div>
 <div id="notifier" class="notify"><span id="notifyType" class=""></span></div>
 <script src="{% static 'js/background-slider.js' %}"></script>
-<script src="{% static 'js/pagination.js' %}"></script>
+
 </body>
 </html>

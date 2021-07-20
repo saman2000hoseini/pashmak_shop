@@ -1,14 +1,21 @@
 from django.shortcuts import render
 from .forms import NewProduct
 from datetime import date
-from .models import Product,Category
+from .models import Product,Category,Order
 import json
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import JsonResponse
 
 def index(request):
-    products = Product.objects.all()
+    
+    products = Product.objects.order_by('sold')
+    button_range = int(len(products)/1) + 1
+    page_list = []
+    for i in range(1,button_range+1):
+        page_list.append(i)
     categories = Category.objects.all()
     
-    return render (request,'index.html',{'products_list': products, 'categories_list':categories})
+    return render (request,'index.html',{'products_list': products, 'categories_list':categories,'page_list':page_list})
 
 def admin(request):
 
@@ -26,13 +33,19 @@ def admin(request):
         new_product = Product(p_name=pr_name,category=p_category,price = p_price,inventory=p_inventory,sold=p_sold,added_date=p_added_date,img=p_img)
         new_product.save()
 
-
     products = Product.objects.all()
     categories = Category.objects.all()
-
+    receipt = Order.objects.all()
        
     
-    return render (request,'admin.html',{'form': form,'products_list': products,'categories_list':categories})
+    return render (request,'admin.html',{'form': form,'products_list': products,'categories_list':categories, 'receipts':receipt})
+
+def search_receipts(request):
+    data = json.loads(request.body)
+    receipt = Order.objects.filter(id = data['code'])
+
+    return render (request,'receipts.html',{'receipts':receipt})
+
 
 
 def delete_category(request):
@@ -88,7 +101,16 @@ def product_sort(request):
 
             sorted_products = Product.objects.filter(category = data['sort_category'],price__gt=data['lower_price'],price__lt=data['higher_price'])
     
-    return render(request,'sorted_p.html',{'products_list':  sorted_products})
+
+    obj_paginator = Paginator(sorted_products, 3)
+    page_range = obj_paginator.page_range
+    print(page_range)
+    
+    results = list(obj_paginator.page(data['page']).object_list)
+    
+    return render(request,'sorted_p.html',{'products_list':  results},{'page_list':  page_range})
+
+
 
 def product_search(request):
 
@@ -96,3 +118,19 @@ def product_search(request):
     products = Product.objects.filter(p_name = data['search'])
 
     return render(request,'sorted_p.html',{'products_list': products})
+
+def edited_product(request):
+    
+    data = json.loads(request.body)
+    instance = Product.objects.get(id = data['id'])
+    instance.p_name = data['edited_name']
+    instance.category = Category.objects.get(c_name = data['edited_category'])
+    instance.price = data['edited_price']
+    instance.inventory = data['edited_inventory']
+    instance.save()
+
+    products = Product.objects.all()
+
+    return render(request,'new_p.html',{'products_list': products})
+
+

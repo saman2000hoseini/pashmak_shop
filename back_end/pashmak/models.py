@@ -31,6 +31,7 @@ class Order(models.Model):
     )
     u_id = models.ForeignKey(User,on_delete=models.CASCADE)
     p_id = models.ForeignKey(Product,on_delete=models.CASCADE)
+    p_name = models.CharField(max_length=255)
     count = models.IntegerField()
     price = models.IntegerField()
     status = models.CharField(max_length=225,choices=status_choices,default='processing')

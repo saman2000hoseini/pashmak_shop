@@ -53,33 +53,58 @@
             });
 
                 })
-                $(".category-edit-button").click(function (e) {
-                    var id = e.target.id
-                    e.preventDefault();
+        $(".product-item-buy").click(function (e) {
+            e.preventDefault();
+            var id = e.target.id
+            document.getElementById("modal-edit-product").style.display = "block";
+            $(".p_submit").click(function(){
+                e.preventDefault();
+                let edited_name = document.getElementById("edited_name").value
+                let edited_category = document.getElementById("edited_category").value
+                let edited_price = document.getElementById("edited_price").value
+                let edited_inventory = document.getElementById("edited_inventory").value
+                $.ajax({
+                type:'POST',
+                url:"{% url 'edited_product' %}" ,
+                data:
+                    JSON.stringify({ id : id,
+                    edited_name : edited_name,
+                    edited_category : edited_category,
+                    edited_inventory : edited_inventory,
+                    edited_price:edited_price}),
 
-                    $("#order-id").on('keyup',function(e){
-                        if (e.key === 'Enter'){
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success:function(response){
+                    $("#products").html(response)
+                },
+            });
+            document.getElementById("modal-edit-category").style.display = "none";
+        });
 
-                            let code = document.getElementById("order-id").value
-                            console.log(edited_c);
-                            $.ajax({
-                            type:'POST',
-                            url:"{% url 'search_receipts' %}" ,
-                            data:
-                                JSON.stringify({ id : code}),
-        
-                            beforeSend: function(xhr) {
-                                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                            },
-                            success:function(response){
-                                $("#receipts").html(response)
-                            },
-                        });
-                    }
+            })
+        $("#order-id").on('keyup',function(e){
+            if (e.key === 'Enter'){
+
+                let code = document.getElementById("order-id").value
+                $.ajax({
+                type:'POST',
+                url:"{% url 'search_receipts' %}" ,
+                data:
+                    JSON.stringify({ code : code}),
+
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success:function(response){
+                    $("#receipts").html(response)
+                },
+            });
+                }
                 });
     
-                    })
-        });</script>
+             });</script>
       
 </head>
 <body id="user-panel">
@@ -144,78 +169,16 @@
                     <th>هزینه پرداختی</th>
                     <th>آدرس</th>
                 </tr>
+                {% for r in receipts %}
                 <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
+                    <th>{{r.date}}</th>
+                    <th>{{r.f_name}} {{r.s_name}}</th>
+                    <th>{{r.id}}</th>
+                    <th>{{r.p_name}}</th>
+                    <th>{{r.price}}</th>
+                    <th>{{r.address}}</th>
                 </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>سامان حسینی</td>
-                    <td>1234567890</td>
-                    <td>موس</td>
-                    <td>500,000</td>
-                    <td>قزوین، خیابان فلان، کوچه مسعود</td>
-                </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
-                </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
-                </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
-                </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
-                </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
-                </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
-                </tr>
-                <tr class="receipt-row">
-                    <td>1400/04/16</td>
-                    <td>شیرین عبادی</td>
-                    <td>1234567890</td>
-                    <td>موس گیمینگ</td>
-                    <td>500,000,000</td>
-                    <td>زنجان، خیابان فلان، کوچه اردیبهشت</td>
-                </tr>
+                {%endfor%}
             </table>
         </div>
         <div id="categories" class="admin-panel-contents categories-tab tab-content">
@@ -246,8 +209,8 @@
                             <label class="product-item-name">{{product.p_name}}</label>
                             <label class="product-item-group">{{product.category}}</label>
                             <div class="price-actions">
-                                <label class="product-item-price">{{product.proice}}</label>
-                                <button class="product-item-buy">ویرایش محصول</button>
+                                <label class="product-item-price"> {{product.price}} تومان</label>
+                                <button class="product-item-buy" id = {{product.id}}>ویرایش محصول</button>
                             </div>
                         </div>
                     </div>
@@ -263,6 +226,18 @@
                 {% csrf_token %}
                   {{ form }}
                 <button class = "p_submit" type="submit" style = "margin: 10px;">Submit</button>
+            </form>
+		</div>
+	</div>
+    <div id="modal-edit-product" class="modal">
+		<div id="modal-content-edit-product" class="modal-content">
+			<button class="close" >&times;</button>
+            <form id = "product_form">
+                <input id = "edited_name"  type="text" placeholder="نام محصول">
+                <input id = "edited_category" type="text" placeholder="دسته بندی ">
+                <input id = "edited_price" type="text" placeholder="قیمت">
+                <input id = "edited_inventory" type="text" placeholder="موجودی">
+                <button class = "p_submit" style = "margin: 10px;">Submit</button>
             </form>
 		</div>
 	</div>

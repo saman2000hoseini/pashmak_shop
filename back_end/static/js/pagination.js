@@ -79,6 +79,8 @@ function loadPage(event){
         document.getElementById(currentPage).style.backgroundColor = "cornflowerblue";
     }
 
+    
+
     const start = (currentPage-1)*numberPerPage;
     const end = start + numberPerPage;
 
