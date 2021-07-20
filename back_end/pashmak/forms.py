@@ -1,6 +1,7 @@
 from django import forms
 from .models import Product
 
+
 class NewProduct(forms.ModelForm):
     # p_name = forms.CharField(label="نام محصول")
     # p_category = forms.CharField(label="دسته بندی",initial="بدون دسته بندی")
@@ -10,7 +11,4 @@ class NewProduct(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('p_name','category','price','inventory','img')
-
-
-
+        fields = ('p_name', 'category', 'price', 'inventory', 'img')
