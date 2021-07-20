@@ -120,3 +120,4 @@ modules.xml
 *.ipr
 
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains+iml,database,go,java-web
+/back_end/venv/
