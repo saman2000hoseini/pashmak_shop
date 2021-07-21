@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from .forms import NewProduct
 from datetime import date
-from .models import Product, Category, Order
+from .models import Product, Category, Order, User
 import json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
+from django.core import serializers
 
 
 def index(request):
@@ -140,3 +141,32 @@ def create_category(request):
     instance.save()
     categories = Category.objects.all()
     return render(request, 'modify_category.html', {'categories_list': categories})
+
+def login(request):
+
+     return render(request, 'login.html')
+
+def register(request):
+    if request.method == "POST" : 
+        f_name = request.POST['f_name']
+        s_name = request.POST['s_name']
+        email = request.POST['email']
+        password = request.POST['password']
+        address = request.POST['address']
+        duplicate_email = User.objects.get(email = email)
+        print(duplicate_email)
+        if(duplicate_email == None):
+            user = User(email = email, password = password, f_name = f_name, s_name= s_name, address= address, charge= 0, admin= False)
+            user.save()
+
+    return render(request, 'register.html')
+
+
+def get_user(request):
+    print("geeet")
+    if request.method == "POST":
+        print("posos")
+        json_serializer = serializers.get_serializer("json")()
+        users = json_serializer.serialize(User.objects.all(), ensure_ascii=False)
+        print(users)
+        return JsonResponse({'users':users})

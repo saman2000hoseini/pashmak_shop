@@ -5,22 +5,22 @@
 <head>
     <meta charset="UTF-8">
     <title>ورود | فروشگاه اینترنتی پشمک شاپ</title>
-    <link rel="icon" href="./img/logo.png" type="image/icon type">
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
     <link href="{% static 'css/font.css' %}" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
-    <link href="css/responsive.css" rel="stylesheet">
-    <link href="css/user-panel.css" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
 </head>
 <body id="user-panel">
 <div id="main-window">
     <div id="main-menu">
         <div id="menu-items">
             <div id="menu-shop-item" class="menu-item">
-                <img id="menu-shop-logo-item" src="img/logo.png" alt="لوگو">
+                <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
                 <div>پشمک شاپ</div>
             </div>
-            <div class="menu-item">صفحه اصلی</div>
-            <div class="menu-item">محصولات</div>
+            <div class="menu-item"><a href = "/">صفحه اصلی</a></div>
+            <div class="menu-item"><a href = "/#product-items-container"> محصولات</a></div>
             <div class="menu-item">پشتیبانی</div>
             <div class="menu-item">تماس با ما</div>
         </div>
@@ -57,6 +57,6 @@
 		</div>
 	</div>
 </div>
-<script src="js/login-validation.js"></script>
+<script src="{% static 'js/login-validation.js' %}"></script>
 </body>
 </html>

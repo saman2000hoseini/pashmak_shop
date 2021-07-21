@@ -1,13 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>فضای کاربری</title>
-    <link rel="icon" href="./img/logo.png" type="image/icon type">
-    <link href="css/font.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
-    <link href="css/responsive.css" rel="stylesheet">
-    <link href="css/user-panel.css" rel="stylesheet">
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
     <script src="js/profile.js"></script>
 </head>
 <body id="user-panel">
@@ -18,8 +20,8 @@
                 <img id="menu-shop-logo-item" src="img/logo.png" alt="لوگو">
                 <div>پشمک شاپ</div>
             </div>
-            <div class="menu-item">صفحه اصلی</div>
-            <div class="menu-item">محصولات</div>
+            <div class="menu-item"><a href = "/">صفحه اصلی</a></div>
+            <div class="menu-item"><a href = "/#product-items-container"> محصولات</a></div>
             <div class="menu-item">پشتیبانی</div>
             <div class="menu-item">تماس با ما</div>
         </div>

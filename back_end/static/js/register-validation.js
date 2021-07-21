@@ -1,4 +1,40 @@
-var user_list = [{"email": "samanhoseini@gmail.com","password": "saman1234"},{"email": "shirinebadi79@gmail.com","password":"shirin1234"},{"email":"pashmak@yahoo.com","password": "pashamk1234"}];
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+$.ajax({
+    method: 'POST', //you can set what request you want to be
+    url: "get_user",
+    beforeSend: function(xhr) {
+        xhr.setRequestHeader("X-CSRFToken",  csrftoken);
+    },
+    success:function(response){
+        users = response['users']
+        res = JSON.parse(users)
+        user_list = []
+        for ( i=0; i <res.length; i++){
+            user_list[i] = res[i]['fields']['email']
+            console.log(user_list[i])
+        }
+
+    },
+  });
+
+
+
 const pass_reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 const email_reg = /^\s*(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))\s*$/;
 
@@ -141,7 +177,7 @@ function modalEvent(event){
         let invalid_address = document.getElementById("invalid-message-address");
 
         for (i = 0; i < user_list.length; i++){
-            if(email.value !== user_list[i].email && invalid_email === null && invalid_password === null && invalid_address === null && invalid_text === null && email.value !== "" && password.value !=="" && f_name.value != "" && family.value!=="" && address.value !==""){
+            if(email.value !== user_list[i] && invalid_email === null && invalid_password === null && invalid_address === null && invalid_text === null && email.value !== "" && password.value !=="" && f_name.value != "" && family.value!=="" && address.value !==""){
                 let content = document.getElementById("modal-content");
 
                 let message = document.createElement("p");
