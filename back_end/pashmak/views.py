@@ -157,16 +157,19 @@ def login(request):
         print("inja")
         user_email = request.POST.get('email')
         user_password = request.POST.get('password')
-        user = authenticate(request, username=user_email, password=user_password)
-        if user is not None:
+        user_auth = authenticate(request, username=user_email, password=user_password)
+        if user_auth is not None:
+            user = User.objects.get(email = user_email)
             request.session['u_id'] = user._get_pk_val
             request.session['email'] = user.email
             request.session['f_name'] = user.f_name
             request.session['s_name'] = user.s_name
             request.session['admin'] = user.admin
-            print("loged in")
+
+            print(user.f_name, user.charge)
+            return (request, 'profile.html')
         else:
-            print("nashod")
+            print("ih")
             return render(request, 'login.html')
 
     return render(request, 'login.html')
@@ -202,3 +205,7 @@ def get_user(request):
 @login_required(login_url='login')
 def product_buy(request):
     pass
+
+@login_required(login_url='login')
+def profile(request):
+    return render(request,'profile.html')
