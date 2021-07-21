@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    products = Product.objects.all()
+    products = Product.objects.all().order_by('-added_date')
 
     obj_paginator = Paginator(products, 15)
     page = request.GET.get('page')
@@ -79,33 +79,33 @@ def product_sort(request):
     sorted_products = Product.objects.filter(price__gt=data['lower_price'], price__lt=data['higher_price']).order_by(
         'sold')
 
-    if (data['sort_item'] != "none" and data['sort_category'] == "none"):
-        if (data['sort_item'] == 0):
+    if data['sort_item'] != "none" and data['sort_category'] == "none":
+        if data['sort_item'] == 0:
             sorted_products = Product.objects.filter(price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('sold')
 
-        if (data['sort_item'] == 1):
+        if data['sort_item'] == 1:
             sorted_products = Product.objects.filter(price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('-price')
 
-        if (data['sort_item'] == 2):
+        if data['sort_item'] == 2:
             sorted_products = Product.objects.filter(price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('price')
 
-    if (data['sort_item'] != "none" and data['sort_category'] != "none"):
-        if (data['sort_item'] == 0):
+    if data['sort_item'] != "none" and data['sort_category'] != "none":
+        if data['sort_item'] == 0:
             sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('sold')
 
-        if (data['sort_item'] == 1):
+        if data['sort_item'] == 1:
             sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('-price')
 
-        if (data['sort_item'] == 2):
+        if data['sort_item'] == 2:
             sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('price')
 
-    if (data['sort_item'] == "none" and data['sort_category'] != "none"):
+    if data['sort_item'] == "none" and data['sort_category'] != "none":
         sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                  price__lt=data['higher_price'])
 
@@ -113,7 +113,7 @@ def product_sort(request):
     page = request.GET.get('page')
     paged_products = obj_paginator.get_page(page)
 
-    return render(request, 'sorted_p.html', {'products_list': paged_products})
+    return render(request, 'index.html', {'products_list': paged_products})
 
 
 def product_search(request):
