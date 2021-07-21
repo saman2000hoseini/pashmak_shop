@@ -16,5 +16,5 @@ urlpatterns = [
     url(r'^product_search$', views.product_search, name="product_search"),
     url(r'^login$', views.login, name="login"),
     url(r'^register$', views.register, name="register"),
-    url(r'^receipts', views.get_receipts, name="get_receipts"),
+    url(r'^profile', views.profile, name="profile"),
 ]
