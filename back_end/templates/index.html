@@ -39,7 +39,7 @@
             f_sort = null;
             f_elemnt = document.getElementsByClassName('sort-item-input');
             for (i = 0; i < f_elemnt.length; i++) {
-                if (f_elemnt[i].checked == true) {
+                if (f_elemnt[i].checked === true) {
                     f_sort = i
                     console.log(i)
                 }
@@ -52,7 +52,7 @@
             s_elemnt = document.getElementsByClassName('filter-products-checkbox');
 
             for (i = 0; i < s_elemnt.length; i++) {
-                if (s_elemnt[i].checked == true) {
+                if (s_elemnt[i].checked === true) {
                     s_sort = s_elemnt[i].value
                 }
             }
@@ -100,8 +100,12 @@
                 <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
                 <div>پشمک شاپ</div>
             </div>
-            <div class="menu-item"><a href="/">صفحه اصلی</a></div>
-            <div class="menu-item"><a href="/#product-items-container">محصولات</a></div>
+            <a href="/">
+                <div class="menu-item">صفحه اصلی</div>
+            </a>
+            <a href="/#product-items-container">
+                <div class="menu-item">محصولات</div>
+            </a>
             <div class="menu-item">پشتیبانی</div>
             <div class="menu-item">تماس با ما</div>
         </div>
@@ -120,21 +124,45 @@
         </div>
     </div>
     <div id="contents">
-        <div class="hero-header-image">
-            <img class="slider-img" src="{% static 'img/2.jpg' %}" alt="slider">
-            <img class="slider-img" src="{% static 'img/1.jpg' %}" alt="slider">
-            <img class="slider-img" src="{% static 'img/3.png' %}" alt="slider">
-            <img class="slider-img" src="{% static 'img/4.jpg' %}" alt="slider">
-        </div>
-        <div class="hero-header" style="z-index: 1">
-            <div id="hero-header-title" class="awesome-title">در محصولات سایت جستجو کنید</div>
-            <input id="hero-header-input" class="persian-text" onkeypress="search(event,id)"
+        <div class="hero-header slider-img" style="background-image: url('/static/img/1.jpg')">
+            <div id="hero-header-title1" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
                    placeholder="نام محصول خود را وارد کنید"/>
-            <button id="hero-header-button" class="awesome-button">جستجو</button>
-            <div id="slideshow-control">
+            <div class="slideshow-control">
                 <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
                 <a class="next" onclick="buttonSlides(1)">&#10095;</a>
             </div>
+            <button id="hero-header-button1" class="awesome-button">جستجو</button>
+        </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/2.jpg')">
+            <div id="hero-header-title2" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button2" class="awesome-button">جستجو</button>
+        </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/3.png')">
+            <div id="hero-header-title3" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button3" class="awesome-button">جستجو</button>
+        </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/4.jpg')">
+            <div id="hero-header-title4" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button4" class="awesome-button">جستجو</button>
         </div>
 
         <div id="product-items-container">
@@ -186,7 +214,6 @@
                     </div>
                 </div>
                 <div id="products">
-
                     {% for product in products_list%}
                     <div class="product-item">
                         <div class="product-item-container">
@@ -200,13 +227,13 @@
                         </div>
                     </div>
                     {% endfor %}
-                    <div class="paginator-buttons">
-                        <button onclick="product_sort('prv')">قبل</button>
-                        {% for i in page_list %}
-                        <button onclick="product_sort('{{i}}')">{{i}}</button>
-                        {% endfor %}
-                        <button onclick="product_sort('nxt')">بعد</button>
-                    </div>
+                </div>
+                <div class="paginator-buttons">
+                    <button onclick="product_sort('prv')">قبل</button>
+                    {% for i in page_list %}
+                    <button onclick="product_sort('{{i}}')">{{i}}</button>
+                    {% endfor %}
+                    <button onclick="product_sort('nxt')">بعد</button>
                 </div>
             </div>
         </div>
