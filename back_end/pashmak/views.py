@@ -186,5 +186,5 @@ def get_user(request):
         return JsonResponse({'users':users})
 @login_required(login_url='login')
 def product_buy(request):
-    print("injam")
+    pass
 
