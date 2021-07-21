@@ -1,4 +1,5 @@
 {% load static %}
+{% static "img/sample"  as baseurl%}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -235,7 +236,7 @@
                 <div id="products">
                     {% for product in products_list%}
                     <div class="product-item-container">
-                        <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
+                        <img class="product-item-image" src="{{baseurl}}/{{product.img}}">
                         <label class="product-item-name">{{product.p_name}}</label>
                         <label class="product-item-group">{{product.category}}</label>
                         <div class="price-actions">

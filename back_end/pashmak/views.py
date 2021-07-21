@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.core import serializers
 from django.contrib.auth.models import User as UserAuth
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login as login_auth
 from django.contrib.auth.decorators import login_required
 
 
@@ -149,7 +149,6 @@ def create_category(request):
 
 def get_receipts(request):
     receipt = Order.objects.filter(u_id=request.session['u_id'])
-
     return render(request, 'profile.html', {'receipts': receipt})
 
 
@@ -167,8 +166,8 @@ def login(request):
             request.session['s_name'] = user.s_name
             request.session['admin'] = user.admin
 
-            print(user.f_name, user.charge)
-            return (request, 'profile.html')
+            login_auth(request, user_auth)
+            return render (request, 'profile.html', {'user-f-name': user.f_name,'user-charge': user.charge})
         else:
             print("ih")
             return render(request, 'login.html')
