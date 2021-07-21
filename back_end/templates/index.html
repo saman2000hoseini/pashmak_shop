@@ -215,15 +215,13 @@
                 </div>
                 <div id="products">
                     {% for product in products_list%}
-                    <div class="product-item">
-                        <div class="product-item-container">
-                            <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
-                            <label class="product-item-name">{{product.p_name}}</label>
-                            <label class="product-item-group">{{product.category}}</label>
-                            <div class="price-actions">
-                                <label class="product-item-price">{{product.price}} تومان </label>
-                                <button class="product-item-buy">خرید</button>
-                            </div>
+                    <div class="product-item-container">
+                        <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
+                        <label class="product-item-name">{{product.p_name}}</label>
+                        <label class="product-item-group">{{product.category}}</label>
+                        <div class="price-actions">
+                            <label class="product-item-price">{{product.price}} تومان </label>
+                            <button class="product-item-buy">خرید</button>
                         </div>
                     </div>
                     {% endfor %}

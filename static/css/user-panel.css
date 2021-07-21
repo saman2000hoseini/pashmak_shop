@@ -47,8 +47,8 @@ html, body {margin: 0; height: 100%; overflow: hidden}
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: auto;
-    margin: 20px auto;
+    height: 100%;
+    margin: 0 auto;
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 1;
@@ -111,7 +111,7 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 }
 
 #admin-tab {
-    margin: 10px;
+    margin: 10px auto;
 }
 
 #admin {
@@ -163,8 +163,8 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 }
 
 .product-amount {
-    margin-right: 200px;
-    margin-top: -40px;
+    margin-right: 210px;
+    margin-top: 0;
     padding: 10px;
     position: relative;
     z-index: 10;
