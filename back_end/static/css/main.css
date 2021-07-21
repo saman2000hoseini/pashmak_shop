@@ -18,7 +18,7 @@ body, html {
 #main-window {
     max-width: 1280px;
     min-height: 100vh;
-    height: 100%;
+    height: fit-content;
     margin: auto;
     align-self: center;
     alignment: center;
@@ -313,6 +313,7 @@ body, html {
 
 #product-items {
     width: 100%;
+    height: auto;
     direction: rtl;
     display: grid;
     grid-template-columns: 20% auto;
