@@ -13,11 +13,31 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="{% static 'js/range_slider.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
-    <script>
-
-        function search(event, id) {
+    <script>$(document).ready(function () {
+           $(".product-item-buy").click(function (e){
+                id = e.target.id
+                console.log(id)
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'product_buy' %}",
+                    data:
+                        JSON.stringify({
+                            id:id,
+                        }),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        $("#main-window").html(response)
+                    },
+                });
+            
+        });
+    });
+        function search(event) {
             if (event.keyCode === 13) {
-                let product_name = document.getElementById(id).value;
+                let product_name = event.target.value;
+                console.log(product_name)
                 $.ajax({
                     type: 'POST',
                     url: "{% url 'product_search' %}",
@@ -89,7 +109,6 @@
             });
 
         }
-
     </script>
 </head>
 <body>
@@ -221,7 +240,7 @@
                         <label class="product-item-group">{{product.category}}</label>
                         <div class="price-actions">
                             <label class="product-item-price">{{product.price}} تومان </label>
-                            <button class="product-item-buy">خرید</button>
+                            <button class="product-item-buy" id={{product.id}}>خرید</button>
                         </div>
                     </div>
                     {% endfor %}

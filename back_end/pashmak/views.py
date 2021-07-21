@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.contrib.auth.models import User as UserAuth
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -149,8 +150,6 @@ def login(request):
         print("inja")
         user_email = request.POST.get('email')
         user_password = request.POST.get('password')
-        print(user_email)
-        print(user_password)
         user = authenticate(request, username= user_email, password= user_password)
         if user is not None:
             print("loged in")
@@ -179,10 +178,13 @@ def register(request):
 
 
 def get_user(request):
-    print("geeet")
     if request.method == "POST":
-        print("posos")
+
         json_serializer = serializers.get_serializer("json")()
         users = json_serializer.serialize(User.objects.all(), ensure_ascii=False)
         print(users)
         return JsonResponse({'users':users})
+@login_required(login_url='login')
+def product_buy(request):
+    print("injam")
+

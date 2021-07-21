@@ -1,5 +1,37 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
 
-var user_list = [{"email": "samanhoseini@gmail.com","password": "saman1234"},{"email": "shirinebadi79@gmail.com","password":"shirin1234"},{"email":"pashmak@yahoo.com","password": "pashamk1234"}];
+$.ajax({
+    method: 'POST', //you can set what request you want to be
+    url: "get_user",
+    beforeSend: function(xhr) {
+        xhr.setRequestHeader("X-CSRFToken",  csrftoken);
+    },
+    success:function(response){
+        users = response['users']
+        res = JSON.parse(users)
+        user_list = []
+        for ( i=0; i <res.length; i++){
+            user_list[i] = {'email': res[i]['fields']['email'], 'password': res[i]['fields']['password']}
+            console.log(user_list[i])
+        }
+
+    },
+  });
 
 let email = document.getElementById("email");
 let password = document.getElementById("password");

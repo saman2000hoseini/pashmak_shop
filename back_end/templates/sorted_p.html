@@ -1,6 +1,27 @@
 {% load static %}
 <!DOCTYPE html>
+<script>$(document).ready(function () {
+$(".product-item-buy").click(function (e){
+    id = e.target.id
+    console.log(id)
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'product_buy' %}",
+        data:
+            JSON.stringify({
+                id:id,
+            }),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function (response) {
+            $("#main-window").html(response)
+        },
+    });
 
+});
+});
+</script>
 {% for product in products_list%}
 <div class="product-item">
     <div class="product-item-container">
