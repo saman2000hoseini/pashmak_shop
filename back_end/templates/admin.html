@@ -16,119 +16,123 @@
             var id = e.target.id
             e.preventDefault();
             $.ajax({
-                type:'POST',
-                url:"{% url 'delete_category' %}" ,
+                type: 'POST',
+                url: "{% url 'delete_category' %}",
                 data:
-                    JSON.stringify({ id : id}),
-                beforeSend: function(xhr) {
+                    JSON.stringify({id: id}),
+                beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                 },
-                success:function(response){
+                success: function (response) {
                     $("#categories").html(response)
                 },
             });
         });
         $(".category-edit-button").click(function (e) {
-                var id = e.target.id
-                e.preventDefault();
-                document.getElementById("modal-edit-category").style.display = "block";
-                $(".p_submit").click(function(){
-                    let edited_c = document.getElementById("edited_c").value
-                    console.log(edited_c);
-                    $.ajax({
-                    type:'POST',
-                    url:"{% url 'edited_category' %}" ,
+            var id = e.target.id
+            e.preventDefault();
+            document.getElementById("modal-edit-category").style.display = "block";
+            $(".p_submit").click(function () {
+                let edited_c = document.getElementById("edited_c").value
+                console.log(edited_c);
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'edited_category' %}",
                     data:
-                        JSON.stringify({ id : id,
-                        new_c : edited_c}),
+                        JSON.stringify({
+                            id: id,
+                            new_c: edited_c
+                        }),
 
-                    beforeSend: function(xhr) {
+                    beforeSend: function (xhr) {
                         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                     },
-                    success:function(response){
+                    success: function (response) {
                         $("#categories").html(response)
                     },
                 });
                 document.getElementById("modal-edit-category").style.display = "none";
             });
 
-                })
-                $(".category-create-button").click(function (e) {
-                e.preventDefault();
-                document.getElementById("modal-edit-category").style.display = "block";
-                $(".p_submit").click(function(){
-                    let edited_c = document.getElementById("edited_c").value
-                    console.log(edited_c);
-                    $.ajax({
-                    type:'POST',
-                    url:"{% url 'create_category' %}" ,
+        })
+        $(".category-create-button").click(function (e) {
+            e.preventDefault();
+            document.getElementById("modal-edit-category").style.display = "block";
+            $(".p_submit").click(function () {
+                let edited_c = document.getElementById("edited_c").value
+                console.log(edited_c);
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'create_category' %}",
                     data:
-                        JSON.stringify({new_c : edited_c}),
+                        JSON.stringify({new_c: edited_c}),
 
-                    beforeSend: function(xhr) {
+                    beforeSend: function (xhr) {
                         xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                     },
-                    success:function(response){
+                    success: function (response) {
                         $("#categories").html(response)
                     },
                 });
                 document.getElementById("modal-edit-category").style.display = "none";
             });
 
-                })
+        })
         $(".product-item-buy").click(function (e) {
             e.preventDefault();
             var id = e.target.id
             document.getElementById("modal-edit-product").style.display = "block";
-            $(".p_submit").click(function(){
+            $(".p_submit").click(function () {
                 e.preventDefault();
                 let edited_name = document.getElementById("edited_name").value
                 let edited_category = document.getElementById("edited_category").value
                 let edited_price = document.getElementById("edited_price").value
                 let edited_inventory = document.getElementById("edited_inventory").value
                 $.ajax({
-                type:'POST',
-                url:"{% url 'edited_product' %}" ,
-                data:
-                    JSON.stringify({ id : id,
-                    edited_name : edited_name,
-                    edited_category : edited_category,
-                    edited_inventory : edited_inventory,
-                    edited_price:edited_price}),
+                    type: 'POST',
+                    url: "{% url 'edited_product' %}",
+                    data:
+                        JSON.stringify({
+                            id: id,
+                            edited_name: edited_name,
+                            edited_category: edited_category,
+                            edited_inventory: edited_inventory,
+                            edited_price: edited_price
+                        }),
 
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                },
-                success:function(response){
-                    $("#products").html(response)
-                },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        $("#products").html(response)
+                    },
+                });
+                document.getElementById("modal-edit-category").style.display = "none";
             });
-            document.getElementById("modal-edit-category").style.display = "none";
-        });
 
-            })
-        $("#order-id").on('keyup',function(e){
-            if (e.key === 'Enter'){
+        })
+        $("#order-id").on('keyup', function (e) {
+            if (e.key === 'Enter') {
 
                 let code = document.getElementById("order-id").value
                 $.ajax({
-                type:'POST',
-                url:"{% url 'search_receipts' %}" ,
-                data:
-                    JSON.stringify({ code : code}),
+                    type: 'POST',
+                    url: "{% url 'search_receipts' %}",
+                    data:
+                        JSON.stringify({code: code}),
 
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                },
-                success:function(response){
-                    $("#receipts").html(response)
-                },
-            });
-                }
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        $("#receipts").html(response)
+                    },
                 });
-    
-             });</script>
-      
+            }
+        });
+
+    });</script>
+
 </head>
 <body id="user-panel">
 <div id="main-window">
@@ -138,8 +142,8 @@
                 <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
                 <div>پشمک شاپ</div>
             </div>
-            <div class="menu-item"><a href = "/">صفحه اصلی</a></div>
-            <div class="menu-item"><a href = "/#product-items-container"> محصولات</a></div>
+            <div class="menu-item"><a href="/">صفحه اصلی</a></div>
+            <div class="menu-item"><a href="/#product-items-container"> محصولات</a></div>
             <div class="menu-item">پشتیبانی</div>
             <div class="menu-item">تماس با ما</div>
         </div>
@@ -176,9 +180,12 @@
                            placeholder="کد پیگیری را وارد کنید">
                 </div>
             </div>
-            <div id="admin-panel-button-container" class="tab-content products-tab">
+            <div style="display: none" class="admin-panel-button-container tab-content categories-tab">
+                <button class="awesome-button new-product category-create-button">دسته بندی</button>
+            </div>
+            <div class="admin-panel-button-container tab-content products-tab">
                 <div id="admin-panel-button">
-                    <button id="new-product" class="awesome-button" onclick="modal_view()"> ایجاد محصول جدید</button>
+                    <button class="awesome-button new-product" onclick="modal_view()"> ایجاد محصول جدید</button>
                 </div>
             </div>
         </div>
@@ -205,7 +212,6 @@
             </table>
         </div>
         <div id="categories" class="admin-panel-contents categories-tab tab-content">
-            <button class="category-create-button">دسته بندی</button>
             <table class="admin-table">
                 <tr class="category-row">
                     <th>دسته بندی</th>
@@ -216,8 +222,8 @@
                 <tr class="category-row">
                     <td name="c_name">{{category.c_name}}</td>
                     <td>
-                        <button class="category-edit-button" id = {{category.c_name}}>ویرایش</button>
-                        <button class="category-delete-button" id = "{{category.c_name}}">X حذف</button>
+                        <button class="category-edit-button" id={{category.c_name}}>ویرایش</button>
+                        <button class="category-delete-button" id="{{category.c_name}}">X حذف</button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -226,53 +232,53 @@
         <div id="products-management" class="admin-panel-contents products-tab tab-content">
             <div id="products">
                 {% for product in products_list %}
-                    <div class="product-item">
-                        <div class="product-amount">{{product.inventory}}</div>
-                        <div class="product-item-container">
-                            <img class="product-item-image" src="{{baseurl}}/{{product.img}}">
-                            <label class="product-item-name">{{product.p_name}}</label>
-                            <label class="product-item-group">{{product.category}}</label>
-                            <div class="price-actions">
-                                <label class="product-item-price"> {{product.price}} تومان</label>
-                                <button class="product-item-buy" id = {{product.id}}>ویرایش محصول</button>
-                            </div>
+                <div class="product-item">
+                    <div class="product-amount">{{product.inventory}}</div>
+                    <div class="product-item-container">
+                        <img class="product-item-image" src="{{baseurl}}/{{product.img}}">
+                        <label class="product-item-name">{{product.p_name}}</label>
+                        <label class="product-item-group">{{product.category}}</label>
+                        <div class="price-actions">
+                            <label class="product-item-price"> {{product.price}} تومان</label>
+                            <button class="product-item-buy" id={{product.id}}>ویرایش محصول</button>
                         </div>
                     </div>
-                {% endfor %}    
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
     <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
     <div id="modal-new-product" class="modal">
-		<div id="modal-content-new-product" class="modal-content">
-			<button class="close" >&times;</button>
-            <form id = "admin_form" method="POST">
+        <div id="modal-content-new-product" class="modal-content">
+            <button class="close">&times;</button>
+            <form id="admin_form" method="POST">
                 {% csrf_token %}
-                  {{ form }}
-                <button class = "p_submit" type="submit" style = "margin: 10px;">Submit</button>
+                {{ form }}
+                <button class="p_submit" type="submit" style="margin: 10px;">Submit</button>
             </form>
-		</div>
-	</div>
+        </div>
+    </div>
     <div id="modal-edit-product" class="modal">
-		<div id="modal-content-edit-product" class="modal-content">
-			<button class="close" >&times;</button>
-            <form id = "product_form">
-                <input id = "edited_name"  type="text" placeholder="نام محصول">
-                <input id = "edited_category" type="text" placeholder="دسته بندی ">
-                <input id = "edited_price" type="text" placeholder="قیمت">
-                <input id = "edited_inventory" type="text" placeholder="موجودی">
-                <button class = "p_submit" style = "margin: 10px;">Submit</button>
+        <div id="modal-content-edit-product" class="modal-content">
+            <button class="close">&times;</button>
+            <form id="product_form">
+                <input id="edited_name" type="text" placeholder="نام محصول">
+                <input id="edited_category" type="text" placeholder="دسته بندی ">
+                <input id="edited_price" type="text" placeholder="قیمت">
+                <input id="edited_inventory" type="text" placeholder="موجودی">
+                <button class="p_submit" style="margin: 10px;">Submit</button>
             </form>
-		</div>
-	</div>
+        </div>
+    </div>
     <div id="modal-edit-category" class="modal">
-		<div id="modal-content-edit-category" class="modal-content">
-			<button class="close" >&times;</button>
-                {% csrf_token %}
-                <input id = "edited_c" name="edit_form" type="text">
-                <button class = "p_submit" type= "submit" style = "margin: 10px;">Submit</button>
-		</div>
-	</div>
+        <div id="modal-content-edit-category" class="modal-content">
+            <button class="close">&times;</button>
+            {% csrf_token %}
+            <input id="edited_c" name="edit_form" type="text">
+            <button class="p_submit" type="submit" style="margin: 10px;">Submit</button>
+        </div>
+    </div>
 </div>
 <script src="{% static 'js/profile.js' %}"></script>
 </body>
