@@ -35,24 +35,26 @@
             فروشگاه - ورود
         </div>
         <div id="user-panel-login" class="user-panel-contents">
-            <div class="user-panel-item">
-                <label for="email" class="user-panel-label">ایمیل</label>
-                <input id="email" class="user-panel-input english-text" type="email" placeholder="example@pashmak.com">
-            </div>
-            <div class="user-panel-item">
-                <label for="password" class="user-panel-label">رمز عبور</label>
-                <input id="password" class="user-panel-input english-text" type="password" placeholder="password">
-            </div>
-			<p id="message"></p>
+            <form action = "login" method = "POST">
+                {% csrf_token %}
+                <div class="user-panel-item">
+                    <label for="email" class="user-panel-label">ایمیل</label>
+                    <input id="email" name="email" class="user-panel-input english-text" type="email" placeholder="example@pashmak.com">
+                </div>
+                <div class="user-panel-item">
+                    <label for="password" class="user-panel-label">رمز عبور</label>
+                    <input id="password" name= "password" class="user-panel-input english-text" type="password" placeholder="password">
+                </div>
+                <p id="message"></p>
         </div>
-		
-        <div id="user-panel-button">
-            <button class="awesome-button" type = "submit">ورود</button>
-        </div>
+                <div id="user-panel-button">
+                    <button class="awesome-button" type = "submit">ورود</button>
+                </div>
+            </form>
     </div>
     <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
 	<div id="modal-container" class="modal">
-		<div id="modal-content">
+		<div id="modal-content" class="modal-content">
 			<button class="close" >&times;</button>
 		</div>
 	</div>

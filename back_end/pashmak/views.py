@@ -6,6 +6,8 @@ import json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.core import serializers
+from django.contrib.auth.models import User as UserAuth
+from django.contrib.auth import authenticate
 
 
 def index(request):
@@ -143,8 +145,20 @@ def create_category(request):
     return render(request, 'modify_category.html', {'categories_list': categories})
 
 def login(request):
+    if request.method == "POST" : 
+        print("inja")
+        user_email = request.POST.get('email')
+        user_password = request.POST.get('password')
+        print(user_email)
+        print(user_password)
+        user = authenticate(request, username= user_email, password= user_password)
+        if user is not None:
+            print("loged in")
+        else:
+            print("nashod")
+            return render(request, 'login.html')
 
-     return render(request, 'login.html')
+    return render(request, 'login.html')
 
 def register(request):
     if request.method == "POST" : 
@@ -153,11 +167,13 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password']
         address = request.POST['address']
-        duplicate_email = User.objects.get(email = email)
-        print(duplicate_email)
-        if(duplicate_email == None):
+
+        duplicate_email = User.objects.filter(email = email).exists()
+        if not duplicate_email:
             user = User(email = email, password = password, f_name = f_name, s_name= s_name, address= address, charge= 0, admin= False)
             user.save()
+            user_auth = UserAuth.objects.create_user(username= email,password= password)
+            user_auth.save()
 
     return render(request, 'register.html')
 
