@@ -488,3 +488,8 @@ body, html {
     background-color: #666;
     color: white;
 }
+
+#result{
+    margin-right: 100px;
+    font-size: large;
+}

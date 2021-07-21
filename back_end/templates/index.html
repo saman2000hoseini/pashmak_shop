@@ -6,6 +6,7 @@
     <title>Pashmak Shop</title>
     <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
     <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
     <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
     <link href="{% static 'css/range-slider.css' %}" rel="stylesheet">
@@ -14,27 +15,43 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="{% static 'js/range_slider.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
-    <script>$(document).ready(function () {
+    <script>
+    $(document).ready(function () {
         $(".product-item-buy").click(function (e) {
-            id = e.target.id
-            console.log(id)
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'product_buy' %}",
-                data:
-                    JSON.stringify({
-                        id: id,
-                    }),
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                },
-                success: function (response) {
-                    $("#main-window").html(response)
-                },
-            });
+            document.getElementById("modal-buy-product").style.display = "block";
+            price = e.target.id
+            id = e.target.value
 
+            $(".p_submit").click(function (e) {
+                e.preventDefault();
+                count = document.getElementById("p_count").value
+                total_price = count * parseInt(price)
+                console.log(total_price)
+                document.getElementById("total_price").innerHTML = `TOTAL PRICE: ${total_price}`
+                document.getElementById("total_price").style.display = "block" 
+                $(".p_submit").click(function (e){
+                            $.ajax({
+                        type: 'POST',
+                        url: "{% url 'product_buy' %}",
+                        data:
+                            JSON.stringify({
+                                id: id,
+                                count:count
+                            }),
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                        success: function (response) {
+                            $("#modal-content-buy-product").html(response)
+                        },
+                    });
+                })
+                
         });
+
+
     });
+});
 
     function search(event) {
         if (event.keyCode === 13) {
@@ -110,6 +127,10 @@
             },
         });
     }
+    function exec(event){
+    let modal = document.getElementById("modal-buy-product");
+    modal.style.display = "none";
+}
     </script>
 </head>
 <body>
@@ -234,6 +255,7 @@
                     </div>
                 </div>
                 <div id="products">
+                    <div id="result"></div>
                     {% for product in products_list%}
                     <div class="product-item-container">
                         <img class="product-item-image" src="{{baseurl}}/{{product.img}}">
@@ -241,7 +263,7 @@
                         <label class="product-item-group">{{product.category}}</label>
                         <div class="price-actions">
                             <label class="product-item-price">{{product.price}} تومان </label>
-                            <button class="product-item-buy" id={{product.id}}>خرید</button>
+                            <button class="product-item-buy" id={{product.price}} value="{{product.id}}">خرید</button>
                         </div>
                     </div>
                     {% endfor %}
@@ -273,7 +295,17 @@
         </div>
     </div>
     <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
-</div>
+    <div id="modal-buy-product" class="modal">
+        <div id="modal-content-buy-product" class="modal-content">
+            <button class="close" onclick="exec()">&times;</button>
+            <form id="buy_product_form" method="POST">
+                {% csrf_token %}
+                <input id= "p_count" type="number" name="p_count">
+                <label id="total_price" style="display: none;"></label>
+                <button class="p_submit" style="margin: 10px;">Buy</button>
+            </form>
+        </div>
+    </div>
 <div id="notifier" class="notify"><span id="notifyType" class=""></span></div>
 <script src="{% static 'js/background-slider.js' %}"></script>
 </body>

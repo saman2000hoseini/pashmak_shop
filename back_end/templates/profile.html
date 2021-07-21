@@ -31,7 +31,7 @@
         <div id="menu-user">
             <div id="menu-user-dropdown" class="menu-dropdown">
                 <div id="dropdown-sign">⌵</div>
-                <div id="user-full-name">سامان</div>
+                <div id="user-full-name">{{user_f_name}}</div>
             </div>
             <div class="dropdown-content">
                 <a id="dropdown-profile" href="javascript:void(0)">پروفایل</a>
@@ -43,12 +43,12 @@
         <div id="panel-header" class="awesome-title">
             <div id="profile-container">
                 <div id="user-name" class="profile-item">
-                    سامان
+                {{user_f_name}}
                 </div>
                 <div class="profile-item">عزیز، خوش آمدید.</div>
                 <div class="profile-item profile-tab tab-content">موجودی حساب شما:</div>
                 <div class="profile-item profile-tab tab-content">
-                    0
+                    {{user_charge}}
                 </div>
                 <button id="profile-increase-credit" class="awesome-button profile-tab tab-content">افزایش موجودی
                 </button>
@@ -96,7 +96,6 @@
                 {% for r in receipts %}
                 <tr class="receipt-row">
                     <th>{{r.date}}</th>
-                    <th>{{r.f_name}} {{r.s_name}}</th>
                     <th>{{r.id}}</th>
                     <th>{{r.p_name}}</th>
                     <th>{{r.price}}</th>
@@ -118,6 +117,6 @@
         </div>
     </div>
 </div>
-<script src="js/profile-validation.js"></script>
+<script src="{% static 'js/profile-validation.js' %}"></script>
 </body>
 </html>

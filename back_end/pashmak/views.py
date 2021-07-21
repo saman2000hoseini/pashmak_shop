@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render
 from .forms import NewProduct
 from datetime import date
@@ -9,6 +10,7 @@ from django.core import serializers
 from django.contrib.auth.models import User as UserAuth
 from django.contrib.auth import authenticate, login as login_auth
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 def index(request):
@@ -145,11 +147,14 @@ def create_category(request):
     categories = Category.objects.all()
     return render(request, 'modify_category.html', {'categories_list': categories})
 
-
+@login_required(login_url='login')
 def profile(request):
-    receipt = Order.objects.filter(u_id=request.session['u_id'])
-    return render(request, 'profile.html', {'receipts': receipt})
+    
+    print(request.user.username)
+    user_id = User.objects.get(email = request.user.username)
+    receipts = Order.objects.filter(u_id = user_id.id)
 
+    return render(request, 'profile.html', {'receipts': receipts, 'user_f_name': user_id.f_name, 'user_charge':user_id.charge})
 
 def login(request):
     if request.method == "POST":
@@ -166,7 +171,12 @@ def login(request):
             request.session['admin'] = user.admin
 
             login_auth(request, user_auth)
-            return render (request, 'profile.html', {'user-f-name': user.f_name,'user-charge': user.charge})
+            if(user.admin is not True):
+                 response = redirect('/profile')
+                 return response
+            else:
+                 response = redirect('/admin')
+                 return response
         else:
             print("ih")
             return render(request, 'login.html')
@@ -203,8 +213,36 @@ def get_user(request):
 
 @login_required(login_url='login')
 def product_buy(request):
-    pass
+    print("hi")
 
-@login_required(login_url='login')
-def profile(request):
-    return render(request,'profile.html')
+    if request.method == "POST":
+        print("getmet")
+        data = json.loads(request.body)
+        product = Product.objects.get(id = data['id'])
+        total_price = product.price * int(data['count'])
+        print(total_price)
+        user = User.objects.get(email = request.user.username)
+        if product.inventory >= int(data['count']) and user.charge >= total_price :
+            new_order = Order(u_id = User.objects.get(id=user.id), p_id= Product.objects.get(id=product.id), p_name= product.p_name, count = int(data['count']), price= total_price,date= datetime.date.today(), f_name=user.f_name, s_name=user.s_name, address= user.address)
+            new_order.save()
+
+            user.charge -= total_price
+            user.save()
+
+            product.inventory -= int(data['count'])
+            product.sold += int(data['count'])
+            product.save()
+
+            return render (request,'result.html',{'content': "You Bought the Product!!"})
+        else:
+            return render (request,'result.html',{'content': "Failed :(((("})
+
+    
+        
+
+
+def user_receipts(request):
+    user_id = User.objects.get(email = request.user.email)
+    receipts = Order.objects.filter(u_id = user_id)
+
+    return render(request, 'receipts.html', {'receipts': receipts})
