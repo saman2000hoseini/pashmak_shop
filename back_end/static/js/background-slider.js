@@ -14,7 +14,7 @@ function autoSlides() {
         slideIndex = 1;
     }
 
-    slideImages[slideIndex - 1].style.display = "block";
+    slideImages[slideIndex - 1].style.display = "flex";
 
     setTimeout(autoSlides, 6000);
 }
@@ -33,5 +33,5 @@ function buttonSlides(n) {
         slideIndex = slideImages.length;
     }
 
-    slideImages[slideIndex - 1].style.display = "block";
+    slideImages[slideIndex - 1].style.display = "flex";
 }

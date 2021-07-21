@@ -1,3 +1,4 @@
+
 body, html {
     min-height: 100vh;
     max-height: 100vh;
@@ -171,67 +172,52 @@ body, html {
 #contents {
     margin: 10px;
     width: 100%;
+    height: 100%;
     align-self: center;
     flex-grow: 8;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+    align-content: center;
 }
 
 .hero-header {
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    background-color: rgb(195, 216, 237);
     width: 100%;
     min-width: 100%;
-    display: flex;
-    justify-content: flex-end;
+    height: 500px;
+    position: relative;
+    justify-content: center;
     flex-direction: column;
     align-content: center;
     align-self: stretch;
     align-items: center;
-    height: 500px;
-}
-
-.hero-header-image {
-    position: absolute;
-    height: 500px;
-    width: 1280px;
-    max-width: 1280px;
-    display: block;
 }
 
 .awesome-title {
     display: block;
     text-align: center;
     width: 100%;
-    color: #ea3c3c;
+    color: white;
     font-size: 2em;
-    margin: 20px auto 40px;
+    margin: 40px auto;
 }
 
-#hero-header-input {
+.persian-text {
     outline: none;
-    border: none;
-    margin: 35px auto;
-    width: 80%;
+    margin-left: 70px;
+    width: 90%;
     text-align: center;
     border-radius: 24px;
     padding: 10px;
 }
 
-.slider-img {
-    display: none;
-    width: 100%;
-    height: 500px;
-}
-
-#slideshow-control {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-}
-
 .awesome-button {
-    margin: 35px auto;
-    width: 30%;
+    margin: 40px auto;
+    width: 25%;
     border-radius: 24px;
     padding: 10px;
     font-size: 1.5em;
@@ -243,6 +229,12 @@ body, html {
 .awesome-button:hover {
     background-color: rgb(129, 0, 0);
     color: white;
+}
+
+.slideshow-control {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .prev, .next {
@@ -268,6 +260,7 @@ body, html {
 #product-items-container {
     align-self: center;
     margin: 10px auto;
+    height: 100%;
     width: 95%;
 }
 
@@ -374,7 +367,7 @@ body, html {
 
 .product-item {
     max-width: 240px;
-    display: block;
+    display: flex;
     margin: 15px;
     alignment: center;
 }
@@ -467,9 +460,15 @@ body, html {
     direction: ltr;
 }
 
-.paginator-buttons{
-	margin-left : 220px;
-	margin-top: 10px;
-	border: none;
-	margin-bottom: 10px;
+.paginator-buttons {
+    grid-column-start: 2;
+    margin: 10px auto;
+    display: block;
+}
+
+.paginator-items {
+    margin-left: 600px;
+    margin-top: 10px;
+    border: none;
+    margin-bottom: 10px;
 }
