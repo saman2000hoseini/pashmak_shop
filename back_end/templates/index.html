@@ -14,100 +14,101 @@
     <script src="{% static 'js/range_slider.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script>$(document).ready(function () {
-           $(".product-item-buy").click(function (e){
-                id = e.target.id
-                console.log(id)
-                $.ajax({
-                    type: 'POST',
-                    url: "{% url 'product_buy' %}",
-                    data:
-                        JSON.stringify({
-                            id:id,
-                        }),
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                    },
-                    success: function (response) {
-                        $("#main-window").html(response)
-                    },
-                });
-            
-        });
-    });
-        function search(event) {
-            if (event.keyCode === 13) {
-                let product_name = event.target.value;
-                console.log(product_name)
-                $.ajax({
-                    type: 'POST',
-                    url: "{% url 'product_search' %}",
-                    data:
-                        JSON.stringify({
-                            search: product_name
-                        }),
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                    },
-                    success: function (response) {
-                        $("#products").html(response)
-                    },
-                });
-            }
-        }
-
-        function product_sort(page) {
-            f_sort = null;
-            f_elemnt = document.getElementsByClassName('sort-item-input');
-            for (i = 0; i < f_elemnt.length; i++) {
-                if (f_elemnt[i].checked === true) {
-                    f_sort = i
-                    console.log(i)
-                }
-            }
-            if (f_sort == null) {
-                f_sort = "none";
-            }
-
-            s_sort = null
-            s_elemnt = document.getElementsByClassName('filter-products-checkbox');
-
-            for (i = 0; i < s_elemnt.length; i++) {
-                if (s_elemnt[i].checked === true) {
-                    s_sort = s_elemnt[i].value
-                }
-            }
-            if (s_sort == null) {
-                s_sort = "none";
-            }
-
-            lower_price = getLowerPriceBound()
-            higher_price = getHigherPriceBound()
-
-            if (page == null) {
-                page = 1
-            }
-
-            console.log(page)
-
+        $(".product-item-buy").click(function (e) {
+            id = e.target.id
+            console.log(id)
             $.ajax({
                 type: 'POST',
-                url: "{% url 'product_sort' %}",
+                url: "{% url 'product_buy' %}",
                 data:
                     JSON.stringify({
-                        sort_item: f_sort,
-                        sort_category: s_sort,
-                        lower_price: lower_price,
-                        higher_price: higher_price,
-                        page: page,
+                        id: id,
                     }),
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                 },
                 success: function (response) {
-                    $(".paginator").html(response)
+                    $("#main-window").html(response)
                 },
             });
+
+        });
+    });
+
+    function search(event) {
+        if (event.keyCode === 13) {
+            let product_name = event.target.value;
+            console.log(product_name)
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'product_search' %}",
+                data:
+                    JSON.stringify({
+                        search: product_name
+                    }),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function (response) {
+                    $("#products").html(response)
+                },
+            });
+        }
+    }
+
+    function product_sort(page) {
+        f_sort = null;
+        f_elemnt = document.getElementsByClassName('sort-item-input');
+        for (i = 0; i < f_elemnt.length; i++) {
+            if (f_elemnt[i].checked === true) {
+                f_sort = i
+                console.log(i)
             }
+        }
+        if (f_sort == null) {
+            f_sort = "none";
+        }
+
+        s_sort = null
+        s_elemnt = document.getElementsByClassName('filter-products-checkbox');
+
+        for (i = 0; i < s_elemnt.length; i++) {
+            if (s_elemnt[i].checked === true) {
+                s_sort = s_elemnt[i].value
+            }
+        }
+        if (s_sort == null) {
+            s_sort = "none";
+        }
+
+        lower_price = getLowerPriceBound()
+        higher_price = getHigherPriceBound()
+
+        if (page == null) {
+            page = 1
+        }
+
+        console.log(page)
+
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'product_sort' %}",
+            data:
+                JSON.stringify({
+                    sort_item: f_sort,
+                    sort_category: s_sort,
+                    lower_price: lower_price,
+                    higher_price: higher_price,
+                    page: page,
+                }),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+            },
+            success: function (response) {
+                $(".paginator").html(response)
+            },
+        });
+    }
     </script>
 </head>
 <body>
@@ -231,28 +232,42 @@
                         </div>
                     </div>
                 </div>
-                <div class="paginator">
-                    <div id="products">
-                        {% for product in products_list%}
-                        <div class="product-item-container">
-                            <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
-                            <label class="product-item-name">{{product.p_name}}</label>
-                            <label class="product-item-group">{{product.category}}</label>
-                            <div class="price-actions">
-                                <label class="product-item-price">{{product.price}} تومان </label>
-                                <button class="product-item-buy" id={{product.id}}>خرید</button>
-                            </div>
+                <div id="products">
+                    {% for product in products_list%}
+                    <div class="product-item-container">
+                        <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
+                        <label class="product-item-name">{{product.p_name}}</label>
+                        <label class="product-item-group">{{product.category}}</label>
+                        <div class="price-actions">
+                            <label class="product-item-price">{{product.price}} تومان </label>
+                            <button class="product-item-buy" id={{product.id}}>خرید</button>
                         </div>
-                        {% endfor %}
                     </div>
-                    <div class="paginator-buttons">
-                        <button class="paginator-button" onclick="product_sort('prv')">قبل</button>
-                        {% for i in page_list %}
-                        <button class="paginator-button" id={{i}} onclick="product_sort('{{i}}')">{{i}}</button>
-                        {% endfor %}
-                        <button class="paginator-button" onclick="product_sort('nxt')">بعد</button>
-                    </div>
+                    {% endfor %}
                 </div>
+                {% if products_list.has_other_pages %}
+                <div id="paginator">
+                    {% if products_list.has_previous %}
+                    <a class="paginator-button" href="?page={{products_list.previous_page_number}}">قبل</a>
+                    {% else %}
+                    <a disabled class="paginator-button">قبل</a>
+                    {% endif %}
+                    {% for i in products_list.paginator.page_range %}
+                    {% if products_list.number == i %}
+                    <a class="paginator-button active-paginator">{{i}}</a>
+                    {% else %}
+                    <a class="paginator-button" href="?page={{i}}">{{i}}</a>
+                    {% endif %}
+                    {% endfor %}
+                    {% if products_list.has_next %}
+                    <a class="paginator-button" href="?page={{products_list.next_page_number}}">بعد</a>
+                    {% else %}
+                    <div class="paginator-button">
+                        <a disabled>بعد</a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

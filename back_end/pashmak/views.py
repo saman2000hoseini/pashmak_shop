@@ -12,15 +12,16 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    products = Product.objects.order_by('sold')[:15]
+    products = Product.objects.all()
 
     obj_paginator = Paginator(products, 15)
-    page_range = obj_paginator.page_range
+    page = request.GET.get('page')
+    paged_products = obj_paginator.get_page(page)
 
     categories = Category.objects.all()
 
     return render(request, 'index.html',
-                  {'products_list': products, 'categories_list': categories, 'page_list': page_range})
+                  {'products_list': paged_products, 'categories_list': categories})
 
 
 def admin(request):
