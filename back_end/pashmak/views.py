@@ -110,11 +110,10 @@ def product_sort(request):
                                                  price__lt=data['higher_price'])
 
     obj_paginator = Paginator(sorted_products, 15)
-    page_range = obj_paginator.page_range
+    page = request.GET.get('page')
+    paged_products = obj_paginator.get_page(page)
 
-    results = list(obj_paginator.page(data['page']).object_list)
-
-    return render(request, 'sorted_p.html', {'products_list': results, 'page_list': page_range})
+    return render(request, 'sorted_p.html', {'products_list': paged_products})
 
 
 def product_search(request):
@@ -147,7 +146,7 @@ def create_category(request):
     return render(request, 'modify_category.html', {'categories_list': categories})
 
 
-def get_receipts(request):
+def profile(request):
     receipt = Order.objects.filter(u_id=request.session['u_id'])
     return render(request, 'profile.html', {'receipts': receipt})
 
