@@ -12,16 +12,15 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    
     products = Product.objects.order_by('sold')[:15]
 
     obj_paginator = Paginator(products, 15)
     page_range = obj_paginator.page_range
 
     categories = Category.objects.all()
-    
-    return render (request,'index.html',{'products_list': products, 'categories_list':categories,'page_list':page_range})
 
+    return render(request, 'index.html',
+                  {'products_list': products, 'categories_list': categories, 'page_list': page_range})
 
 
 def admin(request):
@@ -52,6 +51,7 @@ def search_receipts(request):
     receipt = Order.objects.filter(id=data['code'])
 
     return render(request, 'receipts.html', {'receipts': receipt})
+
 
 def delete_category(request):
     print(request.body)
@@ -112,9 +112,8 @@ def product_sort(request):
     page_range = obj_paginator.page_range
 
     results = list(obj_paginator.page(data['page']).object_list)
-    
-    return render(request,'sorted_p.html',{'products_list':  results, 'page_list':  page_range})
 
+    return render(request, 'sorted_p.html', {'products_list': results, 'page_list': page_range})
 
 
 def product_search(request):
@@ -137,6 +136,7 @@ def edited_product(request):
 
     return render(request, 'new_p.html', {'products_list': products})
 
+
 def create_category(request):
     data = json.loads(request.body)
 
@@ -145,13 +145,25 @@ def create_category(request):
     categories = Category.objects.all()
     return render(request, 'modify_category.html', {'categories_list': categories})
 
+
+def get_receipts(request):
+    receipt = Order.objects.filter(u_id=request.session['u_id'])
+
+    return render(request, 'profile.html', {'receipts': receipt})
+
+
 def login(request):
-    if request.method == "POST" : 
+    if request.method == "POST":
         print("inja")
         user_email = request.POST.get('email')
         user_password = request.POST.get('password')
-        user = authenticate(request, username= user_email, password= user_password)
+        user = authenticate(request, username=user_email, password=user_password)
         if user is not None:
+            request.session['u_id'] = user._get_pk_val
+            request.session['email'] = user.email
+            request.session['f_name'] = user.f_name
+            request.session['s_name'] = user.s_name
+            request.session['admin'] = user.admin
             print("loged in")
         else:
             print("nashod")
@@ -159,19 +171,21 @@ def login(request):
 
     return render(request, 'login.html')
 
+
 def register(request):
-    if request.method == "POST" : 
+    if request.method == "POST":
         f_name = request.POST['f_name']
         s_name = request.POST['s_name']
         email = request.POST['email']
         password = request.POST['password']
         address = request.POST['address']
 
-        duplicate_email = User.objects.filter(email = email).exists()
+        duplicate_email = User.objects.filter(email=email).exists()
         if not duplicate_email:
-            user = User(email = email, password = password, f_name = f_name, s_name= s_name, address= address, charge= 0, admin= False)
+            user = User(email=email, password=password, f_name=f_name, s_name=s_name, address=address, charge=0,
+                        admin=False)
             user.save()
-            user_auth = UserAuth.objects.create_user(username= email,password= password)
+            user_auth = UserAuth.objects.create_user(username=email, password=password)
             user_auth.save()
 
     return render(request, 'register.html')
@@ -179,12 +193,12 @@ def register(request):
 
 def get_user(request):
     if request.method == "POST":
-
         json_serializer = serializers.get_serializer("json")()
         users = json_serializer.serialize(User.objects.all(), ensure_ascii=False)
         print(users)
-        return JsonResponse({'users':users})
+        return JsonResponse({'users': users})
+
+
 @login_required(login_url='login')
 def product_buy(request):
     pass
-
