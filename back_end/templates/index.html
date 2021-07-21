@@ -104,11 +104,10 @@
                     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                 },
                 success: function (response) {
-                    $("#products").html(response)
+                    $(".paginator").html(response)
                 },
             });
-
-        }
+            }
     </script>
 </head>
 <body>
@@ -232,25 +231,27 @@
                         </div>
                     </div>
                 </div>
-                <div id="products">
-                    {% for product in products_list%}
-                    <div class="product-item-container">
-                        <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
-                        <label class="product-item-name">{{product.p_name}}</label>
-                        <label class="product-item-group">{{product.category}}</label>
-                        <div class="price-actions">
-                            <label class="product-item-price">{{product.price}} تومان </label>
-                            <button class="product-item-buy" id={{product.id}}>خرید</button>
+                <div class="paginator">
+                    <div id="products">
+                        {% for product in products_list%}
+                        <div class="product-item-container">
+                            <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
+                            <label class="product-item-name">{{product.p_name}}</label>
+                            <label class="product-item-group">{{product.category}}</label>
+                            <div class="price-actions">
+                                <label class="product-item-price">{{product.price}} تومان </label>
+                                <button class="product-item-buy" id={{product.id}}>خرید</button>
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                </div>
-                <div class="paginator-buttons">
-                    <button onclick="product_sort('prv')">قبل</button>
-                    {% for i in page_list %}
-                    <button onclick="product_sort('{{i}}')">{{i}}</button>
-                    {% endfor %}
-                    <button onclick="product_sort('nxt')">بعد</button>
+                    <div class="paginator-buttons">
+                        <button class="paginator-button" onclick="product_sort('prv')">قبل</button>
+                        {% for i in page_list %}
+                        <button class="paginator-button" id={{i}} onclick="product_sort('{{i}}')">{{i}}</button>
+                        {% endfor %}
+                        <button class="paginator-button" onclick="product_sort('nxt')">بعد</button>
+                    </div>
                 </div>
             </div>
         </div>

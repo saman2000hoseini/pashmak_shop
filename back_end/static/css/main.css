@@ -468,9 +468,27 @@ body, html {
 }
 
 .paginator-buttons {
+    margin-right: 420px;
     grid-column-start: 2;
-    margin: 10px auto;
+    margin-top: 10px;
+    border: none;
     display: block;
+}
+
+.paginator-button{
+    border-color: cornflowerblue;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.paginator-button:hover{
+    background-color: cornflowerblue;
+    border-radius: 17px;
+    padding: 18px;
+}
+
+.paginator-button:active{
+    background-color: cornflowerblue;
 }
 
 .paginator-items {

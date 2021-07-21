@@ -22,6 +22,7 @@ $(".product-item-buy").click(function (e){
 });
 });
 </script>
+<div id="products">
 {% for product in products_list%}
 <div class="product-item">
     <div class="product-item-container">
@@ -34,11 +35,12 @@ $(".product-item-buy").click(function (e){
         </div>
     </div>
 </div>
-{% endfor %}   
+{% endfor %}  
+</div> 
 <div class = "paginator-buttons">
-    <button  onclick="product_sort('prv')">قبل</button> 
+    <button  class="paginator-button" onclick="product_sort('prv')">قبل</button> 
     {% for i in page_list %}
-    <button  onclick="product_sort('{{i}}')">{{i}}</button> 
+    <button  class="paginator-button" onclick="product_sort('{{i}}')">{{i}}</button> 
     {% endfor %}  
-    <button onclick="product_sort('nxt')">بعد</button> 
+    <button class="paginator-button" onclick="product_sort('nxt')">بعد</button> 
 </div> 
