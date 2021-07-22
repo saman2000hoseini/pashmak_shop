@@ -73,64 +73,6 @@
             });
         }
     }
-
-    function product_sort(page) {
-        f_sort = null;
-        f_elemnt = document.getElementsByClassName('sort-item-input');
-        for (i = 0; i < f_elemnt.length; i++) {
-            if (f_elemnt[i].checked === true) {
-                f_sort = i
-                console.log(i)
-            }
-        }
-        if (f_sort == null) {
-            f_sort = "none";
-        }
-
-        s_sort = null
-        s_elemnt = document.getElementsByClassName('filter-products-checkbox');
-
-        for (i = 0; i < s_elemnt.length; i++) {
-            if (s_elemnt[i].checked === true) {
-                s_sort = s_elemnt[i].value
-            }
-        }
-        if (s_sort == null) {
-            s_sort = "none";
-        }
-
-        lower_price = getLowerPriceBound()
-        higher_price = getHigherPriceBound()
-
-        if (page == null) {
-            page = 1
-        }
-
-        console.log(page)
-
-        $.ajax({
-            type: 'POST',
-            url: "{% url 'product_sort' %}",
-            data:
-                JSON.stringify({
-                    sort_item: f_sort,
-                    sort_category: s_sort,
-                    lower_price: lower_price,
-                    higher_price: higher_price,
-                    page: page,
-                }),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-            },
-            success: function (response) {
-                $(".paginator").html(response)
-            },
-        });
-    }
-    function exec(event){
-    let modal = document.getElementById("modal-buy-product");
-    modal.style.display = "none";
-}
     </script>
 </head>
 <body>
@@ -211,18 +153,23 @@
                 <div id="sort-title-item">مرتب سازی بر اساس:</div>
                 <ul id="sort-items-list">
                     <li class="sort-item">
-                        <input type='radio' value='1' name='sort_products' id='radio-best-sell'
-                               class="sort-item-input" onchange="product_sort()"/>
+                        <input type='radio' value='-added_date' name='sort_products' id='radio-last'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        <label for='radio-last' class="sort-item-button">آخرین محصولات</label>
+                    </li>
+                    <li class="sort-item">
+                        <input type='radio' value='sold' name='sort_products' id='radio-best-sell'
+                               class="sort-item-input" onchange="sortProducts()"/>
                         <label for='radio-best-sell' class="sort-item-button">بیشترین فروش</label>
                     </li>
                     <li class="sort-item">
-                        <input type='radio' value='2' name='sort_products' id='radio-highest-price'
-                               class="sort-item-input" onchange="product_sort()"/>
+                        <input type='radio' value='-price' name='sort_products' id='radio-highest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
                         <label for='radio-highest-price' class="sort-item-button">بیشترین قیمت</label>
                     </li>
                     <li class="sort-item">
-                        <input type='radio' value='3' name='sort_products' id='radio-lowest-price'
-                               class="sort-item-input" onchange="product_sort()"/>
+                        <input type='radio' value='price' name='sort_products' id='radio-lowest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
                         <label for='radio-lowest-price' class="sort-item-button">کمترین قیمت</label>
                     </li>
                 </ul>
@@ -233,7 +180,7 @@
                         <div class="filter-products-content filter-products-title">دسته بندی‌ها</div>
                         {% for category in categories_list %}
                         <label class="filter-products-content">
-                            <input type="checkbox" value="{{category.c_name}}" onchange="product_sort()"
+                            <input type="checkbox" value="{{category.c_name}}" onchange="sortProducts()"
                                    class="filter-products-checkbox">
                             {{category.c_name}}
                         </label>
@@ -245,10 +192,10 @@
                             <div id="slider-range" class="slider"></div>
                             <div id="range-slider-price-container">
                                 <label for="min-range" class="value">از</label>
-                                <input disabled readonly onchange="product_sort()" type="text" id="min-range"
+                                <input disabled readonly onchange="sortProducts()" type="text" id="min-range"
                                        class="value">
                                 <label for="max-range" class="value">تا</label>
-                                <input disabled readonly onchange="product_sort()" type="text" id="max-range"
+                                <input disabled readonly onchange="sortProducts()" type="text" id="max-range"
                                        class="value">
                             </div>
                         </div>
@@ -271,23 +218,24 @@
                 {% if products_list.has_other_pages %}
                 <div id="paginator">
                     {% if products_list.has_previous %}
-                    <a class="paginator-button" href="?page={{products_list.previous_page_number}}">قبل</a>
+                    <button class="paginator-button" onclick="sortProducts('{{products_list.previous_page_number}}')">
+                        قبل
+                    </button>
                     {% else %}
-                    <a disabled class="paginator-button">قبل</a>
+                    <button disabled class="paginator-button">قبل</button>
                     {% endif %}
                     {% for i in products_list.paginator.page_range %}
                     {% if products_list.number == i %}
-                    <a class="paginator-button active-paginator">{{i}}</a>
+                    <button class="paginator-button active-paginator">{{i}}</button>
                     {% else %}
-                    <a class="paginator-button" href="?page={{i}}">{{i}}</a>
+                    <button class="paginator-button" onclick="sortProducts('{{i}}')">{{i}}</button>
                     {% endif %}
                     {% endfor %}
                     {% if products_list.has_next %}
-                    <a class="paginator-button" href="?page={{products_list.next_page_number}}">بعد</a>
+                    <button class="paginator-button" onclick="sortProducts('{{products_list.next_page_number}}')">بعد
+                    </button>
                     {% else %}
-                    <div class="paginator-button">
-                        <a disabled>بعد</a>
-                    </div>
+                    <button class="paginator-button" disabled>بعد</button>
                     {% endif %}
                 </div>
                 {% endif %}

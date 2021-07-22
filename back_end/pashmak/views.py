@@ -14,10 +14,30 @@ from django.shortcuts import redirect
 
 
 def index(request):
-    products = Product.objects.all()
-
-    obj_paginator = Paginator(products, 15)
     page = request.GET.get('page')
+    f_sort = request.GET.get('f_sort')
+    s_sort = request.GET.get('s_sort')
+    lower = request.GET.get('lower_price')
+    higher = request.GET.get('higher_price')
+
+    products = []
+
+    if f_sort is None:
+        f_sort = "-added_date"
+    if lower is None:
+        lower = 0
+    if higher is None:
+        higher = 50000000
+
+    if s_sort is not None and s_sort != "":
+        for c in s_sort.split(','):
+            products += Product.objects.filter(category=c, price__gt=lower,
+                                               price__lt=higher).order_by(f_sort)
+    else:
+        products = Product.objects.filter(price__gt=lower,
+                                          price__lt=higher).order_by(f_sort)
+
+    obj_paginator = Paginator(products, 3)
     paged_products = obj_paginator.get_page(page)
 
     categories = Category.objects.all()
@@ -81,33 +101,33 @@ def product_sort(request):
     sorted_products = Product.objects.filter(price__gt=data['lower_price'], price__lt=data['higher_price']).order_by(
         'sold')
 
-    if (data['sort_item'] != "none" and data['sort_category'] == "none"):
-        if (data['sort_item'] == 0):
+    if data['sort_item'] != "none" and data['sort_category'] == "none":
+        if data['sort_item'] == 0:
             sorted_products = Product.objects.filter(price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('sold')
 
-        if (data['sort_item'] == 1):
+        if data['sort_item'] == 1:
             sorted_products = Product.objects.filter(price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('-price')
 
-        if (data['sort_item'] == 2):
+        if data['sort_item'] == 2:
             sorted_products = Product.objects.filter(price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('price')
 
-    if (data['sort_item'] != "none" and data['sort_category'] != "none"):
-        if (data['sort_item'] == 0):
+    if data['sort_item'] != "none" and data['sort_category'] != "none":
+        if data['sort_item'] == 0:
             sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('sold')
 
-        if (data['sort_item'] == 1):
+        if data['sort_item'] == 1:
             sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('-price')
 
-        if (data['sort_item'] == 2):
+        if data['sort_item'] == 2:
             sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                      price__lt=data['higher_price']).order_by('price')
 
-    if (data['sort_item'] == "none" and data['sort_category'] != "none"):
+    if data['sort_item'] == "none" and data['sort_category'] != "none":
         sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
                                                  price__lt=data['higher_price'])
 
@@ -115,7 +135,7 @@ def product_sort(request):
     page = request.GET.get('page')
     paged_products = obj_paginator.get_page(page)
 
-    return render(request, 'sorted_p.html', {'products_list': paged_products})
+    return render(request, 'index.html', {'products_list': paged_products})
 
 
 def product_search(request):
@@ -149,8 +169,6 @@ def create_category(request):
 
 @login_required(login_url='login')
 def profile(request):
-    
-    print(request.user.username)
     user_id = User.objects.get(email = request.user.username)
     receipts = Order.objects.filter(u_id = user_id.id)
 
@@ -163,7 +181,7 @@ def login(request):
         user_password = request.POST.get('password')
         user_auth = authenticate(request, username=user_email, password=user_password)
         if user_auth is not None:
-            user = User.objects.get(email = user_email)
+            user = User.objects.get(email=user_email)
             request.session['u_id'] = user._get_pk_val
             request.session['email'] = user.email
             request.session['f_name'] = user.f_name
@@ -237,12 +255,3 @@ def product_buy(request):
         else:
             return render (request,'result.html',{'content': "Failed :(((("})
 
-    
-        
-
-
-def user_receipts(request):
-    user_id = User.objects.get(email = request.user.email)
-    receipts = Order.objects.filter(u_id = user_id)
-
-    return render(request, 'receipts.html', {'receipts': receipts})

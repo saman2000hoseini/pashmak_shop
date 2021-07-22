@@ -484,7 +484,7 @@ body, html {
     padding: 10px;
 }
 
-.active-paginator, .paginator-button:hover, .paginator-button > a:hover {
+.active-paginator, .paginator-button:enabled:hover:not([disabled]) {
     background-color: #666;
     color: white;
 }
