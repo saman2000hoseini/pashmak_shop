@@ -12,10 +12,30 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    products = Product.objects.all().order_by('-added_date')
-
-    obj_paginator = Paginator(products, 15)
     page = request.GET.get('page')
+    f_sort = request.GET.get('f_sort')
+    s_sort = request.GET.get('s_sort')
+    lower = request.GET.get('lower_price')
+    higher = request.GET.get('higher_price')
+
+    products = []
+
+    if f_sort is None:
+        f_sort = "-added_date"
+    if lower is None:
+        lower = 0
+    if higher is None:
+        higher = 50000000
+
+    if s_sort is not None and s_sort != "":
+        for c in s_sort.split(','):
+            products += Product.objects.filter(category=c, price__gt=lower,
+                                               price__lt=higher).order_by(f_sort)
+    else:
+        products = Product.objects.filter(price__gt=lower,
+                                          price__lt=higher).order_by(f_sort)
+
+    obj_paginator = Paginator(products, 3)
     paged_products = obj_paginator.get_page(page)
 
     categories = Category.objects.all()
@@ -158,7 +178,7 @@ def login(request):
         user_password = request.POST.get('password')
         user_auth = authenticate(request, username=user_email, password=user_password)
         if user_auth is not None:
-            user = User.objects.get(email = user_email)
+            user = User.objects.get(email=user_email)
             request.session['u_id'] = user._get_pk_val
             request.session['email'] = user.email
             request.session['f_name'] = user.f_name
@@ -166,7 +186,7 @@ def login(request):
             request.session['admin'] = user.admin
 
             login_auth(request, user_auth)
-            return render (request, 'profile.html', {'user-f-name': user.f_name,'user-charge': user.charge})
+            return render(request, 'profile.html', {'user-f-name': user.f_name, 'user-charge': user.charge})
         else:
             print("ih")
             return render(request, 'login.html')
@@ -205,6 +225,7 @@ def get_user(request):
 def product_buy(request):
     pass
 
+
 @login_required(login_url='login')
 def profile(request):
-    return render(request,'profile.html')
+    return render(request, 'profile.html')

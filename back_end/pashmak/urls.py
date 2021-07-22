@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index),
+    url(r'^$', views.index, name="index"),
     url(r'^admin$', views.admin, name="admin"),
     url(r'^delete_category$', views.delete_category, name="delete_category"),
     url(r'^edited_category$', views.edited_category, name="edited_category"),
