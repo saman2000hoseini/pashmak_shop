@@ -182,13 +182,15 @@ html, body {
 }
 
 .user-panel-item {
-    width: 100%;
+    outline: none;
+    width: 90%;
     margin: 5px auto;
     display: flex;
     direction: rtl;
     justify-content: center;
     justify-self: stretch;
     align-content: stretch;
+    align-items: stretch;
     font-size: 1.2em;
 }
 
@@ -210,9 +212,11 @@ html, body {
 }
 
 .user-panel-input {
+    outline: none;
+    width: 100%;
     text-align: center;
-    width: auto;
     border-radius: 5px 0 0 5px;
+    padding: 10px;
 }
 
 .message {
@@ -357,6 +361,7 @@ html, body {
 }
 
 #address {
+    width: 100%;
     resize: none;
 }
 
