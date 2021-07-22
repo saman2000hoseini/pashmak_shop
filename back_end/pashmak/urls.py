@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^edited_product$', views.edited_product, name="edited_product"),
     url(r'^search_receipts$', views.search_receipts, name="search_receipts"),
     url(r'^product_search$', views.product_search, name="product_search"),
+    url(r'^product_sort$', views.product_sort, name="product_sort"),
     url(r'^login$', views.login, name="login"),
     url(r'^logout$', views.logout, name="logout"),
     url(r'^register$', views.register, name="register"),

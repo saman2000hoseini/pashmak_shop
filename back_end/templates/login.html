@@ -20,48 +20,48 @@
                 <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
                 <div>پشمک شاپ</div>
             </div>
-            <div class="menu-item"><a href = "/">صفحه اصلی</a></div>
-            <div class="menu-item"><a href = "/#product-items-container"> محصولات</a></div>
+            <div class="menu-item"><a href="/">صفحه اصلی</a></div>
+            <div class="menu-item"><a href="/#product-items-container"> محصولات</a></div>
             <div class="menu-item">پشتیبانی</div>
             <div class="menu-item">تماس با ما</div>
         </div>
         <div id="menu-user">
             <div id="menu-user-button" class="unauthorized">
-                <a href = "/register">
-                ورود / ثبت نام
+                <a href="/register">
+                    ورود / ثبت نام
                 </a>
             </div>
 
         </div>
     </div>
-    <div id="user-panel-container">
+    <form id="user-panel-container" action="login" method="POST">
         <div id="panel-header" class="awesome-title">
             فروشگاه - ورود
         </div>
         <div id="user-panel-login" class="user-panel-contents">
-            <form action = "login" method = "POST">
-                {% csrf_token %}
-                <div class="user-panel-item">
-                    <label for="email" class="user-panel-label">ایمیل</label>
-                    <input id="email" name="email" class="user-panel-input english-text" type="email" placeholder="example@pashmak.com">
-                </div>
-                <div class="user-panel-item">
-                    <label for="password" class="user-panel-label">رمز عبور</label>
-                    <input id="password" name= "password" class="user-panel-input english-text" type="password" placeholder="password">
-                </div>
-                <p id="message"></p>
+            {% csrf_token %}
+            <div class="user-panel-item">
+                <label for="email" class="user-panel-label">ایمیل</label>
+                <input id="email" name="email" class="user-panel-input english-text" type="email"
+                       placeholder="example@pashmak.com">
+            </div>
+            <div class="user-panel-item">
+                <label for="password" class="user-panel-label">رمز عبور</label>
+                <input id="password" name="password" class="user-panel-input english-text" type="password"
+                       placeholder="password">
+            </div>
+            <p id="message"></p>
         </div>
-                <div id="user-panel-button">
-                    <button class="awesome-button" type = "submit">ورود</button>
-                </div>
-            </form>
-    </div>
+        <div id="user-panel-button">
+            <button class="awesome-button" type="submit">ورود</button>
+        </div>
+    </form>
     <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
-	<div id="modal-container" class="modal">
-		<div id="modal-content" class="modal-content">
-			<button class="close" >&times;</button>
-		</div>
-	</div>
+    <div id="modal-container" class="modal">
+        <div id="modal-content" class="modal-content">
+            <button class="close">&times;</button>
+        </div>
+    </div>
 </div>
 <script src="{% static 'js/login-validation.js' %}"></script>
 </body>

@@ -182,7 +182,8 @@ html, body {
 }
 
 .user-panel-item {
-    margin: 5px;
+    width: 100%;
+    margin: 5px auto;
     display: flex;
     direction: rtl;
     justify-content: center;
@@ -210,7 +211,7 @@ html, body {
 
 .user-panel-input {
     text-align: center;
-    width: 100%;
+    width: auto;
     border-radius: 5px 0 0 5px;
 }
 
@@ -348,6 +349,7 @@ html, body {
     padding: 20px 0;
     align-items: stretch;
     align-self: stretch;
+    text-align: center;
 }
 
 #address-label {

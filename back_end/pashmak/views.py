@@ -20,8 +20,6 @@ def index(request):
     lower = request.GET.get('lower_price')
     higher = request.GET.get('higher_price')
 
-
-
     products = []
 
     if f_sort is None:
@@ -41,6 +39,7 @@ def index(request):
 
     obj_paginator = Paginator(products, 3)
     paged_products = obj_paginator.get_page(page)
+
     categories = Category.objects.all()
 
     user_f_name= ""
@@ -111,45 +110,36 @@ def edited_category(request):
 
 def product_sort(request):
     data = json.loads(request.body)
+    page = data['page']
+    f_sort = data['f_sort']
+    s_sort = data['s_sort']
+    lower = data['lower_price']
+    higher = data['higher_price']
 
-    sorted_products = Product.objects.filter(price__gt=data['lower_price'], price__lt=data['higher_price']).order_by(
-        'sold')
+    products = []
 
-    if data['sort_item'] != "none" and data['sort_category'] == "none":
-        if data['sort_item'] == 0:
-            sorted_products = Product.objects.filter(price__gt=data['lower_price'],
-                                                     price__lt=data['higher_price']).order_by('sold')
+    if f_sort is None:
+        f_sort = "-added_date"
+    if lower is None:
+        lower = 0
+    if higher is None:
+        higher = 50000000
 
-        if data['sort_item'] == 1:
-            sorted_products = Product.objects.filter(price__gt=data['lower_price'],
-                                                     price__lt=data['higher_price']).order_by('-price')
+    if s_sort is not None and s_sort != "":
+        for c in s_sort.split(','):
+            products += Product.objects.filter(category=c, price__gt=lower,
+                                               price__lt=higher).order_by(f_sort)
+    else:
+        products = Product.objects.filter(price__gt=lower,
+                                          price__lt=higher).order_by(f_sort)
 
-        if data['sort_item'] == 2:
-            sorted_products = Product.objects.filter(price__gt=data['lower_price'],
-                                                     price__lt=data['higher_price']).order_by('price')
-
-    if data['sort_item'] != "none" and data['sort_category'] != "none":
-        if data['sort_item'] == 0:
-            sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
-                                                     price__lt=data['higher_price']).order_by('sold')
-
-        if data['sort_item'] == 1:
-            sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
-                                                     price__lt=data['higher_price']).order_by('-price')
-
-        if data['sort_item'] == 2:
-            sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
-                                                     price__lt=data['higher_price']).order_by('price')
-
-    if data['sort_item'] == "none" and data['sort_category'] != "none":
-        sorted_products = Product.objects.filter(category=data['sort_category'], price__gt=data['lower_price'],
-                                                 price__lt=data['higher_price'])
-
-    obj_paginator = Paginator(sorted_products, 15)
-    page = request.GET.get('page')
+    obj_paginator = Paginator(products, 3)
     paged_products = obj_paginator.get_page(page)
 
-    return render(request, 'index.html', {'products_list': paged_products})
+    categories = Category.objects.all()
+
+    return render(request, 'index.html',
+                  {'products_list': paged_products, 'categories_list': categories, 'sortBy': f_sort})
 
 
 def product_search(request):
@@ -181,12 +171,15 @@ def create_category(request):
     categories = Category.objects.all()
     return render(request, 'modify_category.html', {'categories_list': categories})
 
+
 @login_required(login_url='login')
 def profile(request):
-    user_id = User.objects.get(email = request.user.username)
-    receipts = Order.objects.filter(u_id = user_id.id)
+    user_id = User.objects.get(email=request.user.username)
+    receipts = Order.objects.filter(u_id=user_id.id)
 
-    return render(request, 'profile.html', {'receipts': receipts, 'user_f_name': user_id.f_name, 'user_charge':user_id.charge})
+    return render(request, 'profile.html',
+                  {'receipts': receipts, 'user_f_name': user_id.f_name, 'user_charge': user_id.charge})
+
 
 def login(request):
     if request.method == "POST":
@@ -202,12 +195,12 @@ def login(request):
             request.session['admin'] = user.admin
 
             login_auth(request, user_auth)
-            if(user.admin is not True):
-                 response = redirect('/profile')
-                 return response
+            if (user.admin is not True):
+                response = redirect('/profile')
+                return response
             else:
-                 response = redirect('/admin')
-                 return response
+                response = redirect('/admin')
+                return response
         else:
             print("ih")
             return render(request, 'login.html')
@@ -251,12 +244,14 @@ def product_buy(request):
     if request.method == "POST":
         print("getmet")
         data = json.loads(request.body)
-        product = Product.objects.get(id = data['id'])
+        product = Product.objects.get(id=data['id'])
         total_price = product.price * int(data['count'])
         print(total_price)
-        user = User.objects.get(email = request.user.username)
-        if product.inventory >= int(data['count']) and user.charge >= total_price :
-            new_order = Order(u_id = User.objects.get(id=user.id), p_id= Product.objects.get(id=product.id), p_name= product.p_name, count = int(data['count']), price= total_price,date= datetime.date.today(), f_name=user.f_name, s_name=user.s_name, address= user.address)
+        user = User.objects.get(email=request.user.username)
+        if product.inventory >= int(data['count']) and user.charge >= total_price:
+            new_order = Order(u_id=User.objects.get(id=user.id), p_id=Product.objects.get(id=product.id),
+                              p_name=product.p_name, count=int(data['count']), price=total_price,
+                              date=datetime.date.today(), f_name=user.f_name, s_name=user.s_name, address=user.address)
             new_order.save()
 
             user.charge -= total_price
@@ -266,43 +261,47 @@ def product_buy(request):
             product.sold += int(data['count'])
             product.save()
 
-            return render (request,'result.html',{'content': "You Bought the Product!!"})
+            return render(request, 'result.html', {'content': "You Bought the Product!!"})
         else:
-            return render (request,'result.html',{'content': "Failed :(((("})
+            return render(request, 'result.html', {'content': "Failed :(((("})
+
 
 @login_required(login_url='login')
 def edit_profile(request):
     data = json.loads(request.body)
 
-    user = User.objects.get(email = request.user.username)
+    user = User.objects.get(email=request.user.username)
     user.f_name = data['edited_f_name']
     user.s_name = data['edited_s_name']
     user.address = data['edited_address']
     user.password = data['edited_password']
     user.save()
 
-    user_auth = UserAuth.objects.get(username = request.user.username)
+    user_auth = UserAuth.objects.get(username=request.user.username)
     user_auth.set_password(data['edited_password'])
     user_auth.save()
 
-    return render (request,'result.html',{'content': "Changed Happily!!"})
+    return render(request, 'result.html', {'content': "Changed Happily!!"})
+
 
 @login_required(login_url='login')
 def edit_charge(request):
     data = json.loads(request.body)
 
-    user = User.objects.get(email = request.user.username)
+    user = User.objects.get(email=request.user.username)
     user.charge = data['edited_charge']
     user.save()
-    
-    return render (request,'charge.html',{'user_charge': user.charge})
+
+    return render(request, 'charge.html', {'user_charge': user.charge})
+
 
 @login_required(login_url='login')
 def logout(request):
     logout_auth(request)
 
-    response= redirect('/')
+    response = redirect('/')
     return response
 
+
 def login_req(request):
-    return render(request,'login_req.html')
+    return render(request, 'login_req.html')

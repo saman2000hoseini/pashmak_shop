@@ -16,58 +16,101 @@
     <script src="{% static 'js/range_slider.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        $(".product-item-buy").click(function (e) {
-            document.getElementById("modal-buy-product").style.display = "block";
-            price = e.target.id
-            id = e.target.value
+            $(".product-item-buy").click(function (e) {
+                document.getElementById("modal-buy-product").style.display = "block";
+                price = e.target.id
+                id = e.target.value
 
-            $(".p_submit").click(function (e) {
-                e.preventDefault();
-                count = document.getElementById("p_count").value
-                total_price = count * parseInt(price)
-                console.log(total_price)
-                document.getElementById("total_price").innerHTML = `TOTAL PRICE: ${total_price}`
-                document.getElementById("total_price").style.display = "block" 
-                $(".p_submit").click(function (e){
-                            $.ajax({
-                        type: 'POST',
-                        url: "{% url 'product_buy' %}",
-                        data:
-                            JSON.stringify({
-                                id: id,
-                                count:count
-                            }),
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                        },
-                        success: function (response) {
+                $(".p_submit").click(function (e) {
+                    e.preventDefault();
+                    count = document.getElementById("p_count").value
+                    total_price = count * parseInt(price)
+                    console.log(total_price)
+                    document.getElementById("total_price").innerHTML = `TOTAL PRICE: ${total_price}`
+                    document.getElementById("total_price").style.display = "block"
+                    $(".p_submit").click(function (e) {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{% url 'product_buy' %}",
+                            data:
+                                JSON.stringify({
+                                    id: id,
+                                    count: count
+                                }),
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                            },
+                            success: function (response) {
 
-                            $("#modal-content-buy-product").html(response)
-                        },
-                    });
-                })    
+                                $("#modal-content-buy-product").html(response)
+                            },
+                        });
+                    })
+                });
+
+            });
+
+            $(".close").click(function (e) {
+                let modal = document.getElementById("modal-buy-product");
+                modal.style.display = "none";
+            });
         });
 
-    });
-       
-    $(".close").click(function (e){
-            let modal = document.getElementById("modal-buy-product");
-            modal.style.display = "none";
-             });
-});
+        function search(event) {
+            if (event.keyCode === 13) {
+                let product_name = event.target.value;
+                console.log(product_name)
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'product_search' %}",
+                    data:
+                        JSON.stringify({
+                            search: product_name
+                        }),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        $("#products").html(response)
+                    },
+                });
+            }
+        }
 
-    function search(event) {
-        if (event.keyCode === 13) {
-            let product_name = event.target.value;
-            console.log(product_name)
+        function sortProducts(page) {
+            let f_sort = null;
+            let f_elements = document.getElementsByClassName('sort-item-input');
+            for (let i = 0; i < f_elements.length; i++) {
+                if (f_elements[i].checked === true) {
+                    f_sort = f_elements[i].value
+                    console.log(i)
+                }
+            }
+
+            let s_sort = []
+            let s_elements = document.getElementsByClassName('filter-products-checkbox');
+
+            for (let i = 0; i < s_elements.length; i++) {
+                if (s_elements[i].checked === true) {
+                    s_sort.push(s_elements[i].value)
+                }
+            }
+
+            let lower_price = getLowerPriceBound()
+            let higher_price = getHigherPriceBound()
+            window.location.replace(`http://localhost:8000?f_sort=${f_sort}&s_sort=${s_sort.join(',')}&lower_price=${lower_price}&higher_price=${higher_price}&page=${page}`);
             $.ajax({
                 type: 'POST',
-                url: "{% url 'product_search' %}",
+                url: "{% url 'product_sort' %}",
                 data:
                     JSON.stringify({
-                        search: product_name
+                        page: page,
+                        f_sort: f_sort,
+                        s_sort: s_sort,
+                        lower_price: lower_price,
+                        higher_price: higher_price
                     }),
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
@@ -77,7 +120,7 @@
                 },
             });
         }
-    }
+
     </script>
 </head>
 <body>
@@ -99,13 +142,13 @@
         </div>
         {% if login == False %}
         <div id="menu-user">
-            <div id="menu-user-button" class="unauthorized">
-                <a href="/login">
-                ورود / ثبت نام
-                </a>
-            </div>
-        </div> 
-        {% endif %}   
+            <a href="/login">
+                <div id="menu-user-button" class="unauthorized">
+                    ورود / ثبت نام
+                </div>
+            </a>
+        </div>
+        {% endif %}
         {% if login == True %}
         <div id="menu-user">
             <div id="menu-user-dropdown" class="menu-dropdown">
@@ -121,15 +164,15 @@
                 <a id="dropdown-profile" href="/profile">پروفایل</a>
                 {% endif %}
 
-                <a id = "log_out" href="/logout">خروج</a>
+                <a id="log_out" href="/logout">خروج</a>
             </div>
         </div>
-        {% endif %}  
+        {% endif %}
     </div>
     <div id="contents">
         <div class="hero-header slider-img" style="background-image: url('/static/img/1.jpg')">
             <div id="hero-header-title1" class="awesome-title">در محصولات سایت جستجو کنید</div>
-            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+            <input class="hero-header-input" onkeypress="search(event,id)"
                    placeholder="نام محصول خود را وارد کنید"/>
             <div class="slideshow-control">
                 <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
@@ -139,7 +182,7 @@
         </div>
         <div class="hero-header slider-img" style="background-image: url('/static/img/2.jpg')">
             <div id="hero-header-title2" class="awesome-title">در محصولات سایت جستجو کنید</div>
-            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+            <input class="hero-header-input" onkeypress="search(event,id)"
                    placeholder="نام محصول خود را وارد کنید"/>
             <div class="slideshow-control">
                 <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
@@ -149,7 +192,7 @@
         </div>
         <div class="hero-header slider-img" style="background-image: url('/static/img/3.png')">
             <div id="hero-header-title3" class="awesome-title">در محصولات سایت جستجو کنید</div>
-            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+            <input class="hero-header-input" onkeypress="search(event,id)"
                    placeholder="نام محصول خود را وارد کنید"/>
             <div class="slideshow-control">
                 <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
@@ -159,7 +202,7 @@
         </div>
         <div class="hero-header slider-img" style="background-image: url('/static/img/4.jpg')">
             <div id="hero-header-title4" class="awesome-title">در محصولات سایت جستجو کنید</div>
-            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+            <input class="hero-header-input" onkeypress="search(event,id)"
                    placeholder="نام محصول خود را وارد کنید"/>
             <div class="slideshow-control">
                 <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
@@ -169,7 +212,7 @@
         </div>
         <div class="hero-header slider-img" style="background-image: url('/static/img/5.png')">
             <div id="hero-header-title5" class="awesome-title">در محصولات سایت جستجو کنید</div>
-            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+            <input class="hero-header-input" onkeypress="search(event,id)"
                    placeholder="نام محصول خود را وارد کنید"/>
             <div class="slideshow-control">
                 <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
@@ -207,7 +250,7 @@
                         <input type='radio' value='-price' checked name='sort_products' id='radio-highest-price'
                                class="sort-item-input" onchange="sortProducts()"/>
                         {% else %}
-                         <input type='radio' value='-price' name='sort_products' id='radio-highest-price'
+                        <input type='radio' value='-price' name='sort_products' id='radio-highest-price'
                                class="sort-item-input" onchange="sortProducts()"/>
                         {% endif %}
                         <label for='radio-highest-price' class="sort-item-button">بیشترین قیمت</label>
@@ -254,13 +297,16 @@
                 <div id="products">
                     <div id="result"></div>
                     {% for product in products_list%}
-                    <div class="product-item-container">
-                        <img class="product-item-image" src="{{baseurl}}/{{product.img}}">
-                        <label class="product-item-name">{{product.p_name}}</label>
-                        <label class="product-item-group">{{product.category}}</label>
-                        <div class="price-actions">
-                            <label class="product-item-price">{{product.price}} تومان </label>
-                            <button class="product-item-buy" id={{product.price}} value="{{product.id}}">خرید</button>
+                    <div class="product-item">
+                        <div class="product-item-container">
+                            <img class="product-item-image" src="{{baseurl}}/{{product.img}}">
+                            <label class="product-item-name">{{product.p_name}}</label>
+                            <label class="product-item-group">{{product.category}}</label>
+                            <div class="price-actions">
+                                <label class="product-item-price">{{product.price}} تومان </label>
+                                <button class="product-item-buy" id={{product.price}} value="{{product.id}}">خرید
+                                </button>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -298,13 +344,13 @@
             <button class="close">&times;</button>
             <form id="buy_product_form" method="POST">
                 {% csrf_token %}
-                <input id= "p_count" type="number" name="p_count">
+                <input id="p_count" type="number" name="p_count">
                 <label id="total_price" style="display: none;"></label>
                 <button class="p_submit" style="margin: 10px;">Buy</button>
             </form>
         </div>
     </div>
-<div id="notifier" class="notify"><span id="notifyType" class=""></span></div>
-<script src="{% static 'js/background-slider.js' %}"></script>
+    <div id="notifier" class="notify"><span id="notifyType" class=""></span></div>
+    <script src="{% static 'js/background-slider.js' %}"></script>
 </body>
 </html>
