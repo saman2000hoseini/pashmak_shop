@@ -1,6 +1,10 @@
 window.onload = function () {
     setActive();
 }
+const urlParams = new URLSearchParams(window.location.search);
+const sortBy = urlParams.get('f_sort');
+console.log(sortBy)
+
 
 function toPrice(price) {
     return price.toString().replace(/(.)(?=(.{3})+$)/g, "$1,");
@@ -32,10 +36,13 @@ function sortProducts(page) {
 }
 
 function setActive() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sortBy = urlParams.get('f_sort');
-
     let sortItems = document.getElementsByClassName("sort-item-input");
+
+    if (sortBy == null || sortBy === "") {
+        sortItems[0].checked = true;
+        return;
+    }
+
     for (let i = 0; i < sortItems.length; i++) {
         sortItems[i].checked = false;
     }
