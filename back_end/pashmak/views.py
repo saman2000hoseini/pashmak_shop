@@ -42,20 +42,22 @@ def index(request):
 
     categories = Category.objects.all()
 
-    user_f_name= ""
+    user_f_name = ""
     admin = False
     if (request.user.is_authenticated):
         logged_in = True
-        user_f_name = User.objects.get(email = request.user.username).f_name
+        user_f_name = User.objects.get(email=request.user.username).f_name
         if (user_f_name == "admin"):
             admin = True
 
-    
+
     else:
         logged_in = False
 
     return render(request, 'index.html',
-                  {'products_list': paged_products, 'categories_list': categories, 'sortBy': f_sort, 'login':logged_in, 'user_f_name': user_f_name, 'admin': admin})
+                  {'products_list': paged_products, 'categories_list': categories, 'sortBy': f_sort, 'login': logged_in,
+                   'user_f_name': user_f_name, 'admin': admin})
+
 
 @login_required(login_url='login')
 def admin(request):
