@@ -26,7 +26,7 @@ $.ajax({
         res = JSON.parse(users)
         user_list = []
         for ( i=0; i <res.length; i++){
-            user_list[i] = res[i]['fields']['email']
+            user_list[i] = {'email': res[i]['fields']['email'],  'password': res[i]['fields']['password']}
             console.log(user_list[i])
         }
 
@@ -166,7 +166,8 @@ btn.addEventListener("click",modalEvent);
 close_btn.addEventListener("click",exec);
 
 function modalEvent(event){
-
+        
+        console.log(user_list.length)
         let valid = false;
         let modal = document.getElementById("modal-container");
         modal.style.display = "block";
@@ -175,9 +176,10 @@ function modalEvent(event){
         let invalid_email = document.getElementById("invalid-message-email");
         let invalid_text = document.getElementById("invalid-message-text");
         let invalid_address = document.getElementById("invalid-message-address");
-
+        console.log(email.value)
         for (i = 0; i < user_list.length; i++){
-            if(email.value !== user_list[i] && invalid_email === null && invalid_password === null && invalid_address === null && invalid_text === null && email.value !== "" && password.value !=="" && f_name.value != "" && family.value!=="" && address.value !==""){
+            console.log(email.value)
+            if(email.value != user_list[i].email && invalid_email === null && invalid_password === null && invalid_address === null && invalid_text === null && email.value !== "" && password.value !=="" && f_name.value != "" && family.value!=="" && address.value !==""){
                 let content = document.getElementById("modal-content");
 
                 let message = document.createElement("p");

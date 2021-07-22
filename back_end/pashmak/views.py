@@ -20,6 +20,8 @@ def index(request):
     lower = request.GET.get('lower_price')
     higher = request.GET.get('higher_price')
 
+
+
     products = []
 
     if f_sort is None:
@@ -39,13 +41,24 @@ def index(request):
 
     obj_paginator = Paginator(products, 3)
     paged_products = obj_paginator.get_page(page)
-
     categories = Category.objects.all()
 
+    user_f_name= ""
+    admin = False
+    if (request.user.is_authenticated):
+        logged_in = True
+        user_f_name = User.objects.get(email = request.user.username).f_name
+        if (user_f_name == "admin"):
+            admin = True
+
+    
+    else:
+        logged_in = False
+
     return render(request, 'index.html',
-                  {'products_list': paged_products, 'categories_list': categories, 'sortBy': f_sort})
+                  {'products_list': paged_products, 'categories_list': categories, 'sortBy': f_sort, 'login':logged_in, 'user_f_name': user_f_name, 'admin': admin})
 
-
+@login_required(login_url='login')
 def admin(request):
     form = NewProduct()
     if request.method == "POST":
@@ -89,8 +102,9 @@ def delete_category(request):
 def edited_category(request):
     data = json.loads(request.body)
     instance = Category.objects.get(c_name=data['id'])
-    instance.pk = data['new_c']
-    instance.save()
+    instance.delete()
+    edited_c = Category(c_name=data['new_c'])
+    edited_c.save()
     categories = Category.objects.all()
     return render(request, 'modify_category.html', {'categories_list': categories})
 
@@ -256,7 +270,7 @@ def product_buy(request):
         else:
             return render (request,'result.html',{'content': "Failed :(((("})
 
-@login_required
+@login_required(login_url='login')
 def edit_profile(request):
     data = json.loads(request.body)
 
@@ -273,7 +287,7 @@ def edit_profile(request):
 
     return render (request,'result.html',{'content': "Changed Happily!!"})
 
-@login_required
+@login_required(login_url='login')
 def edit_charge(request):
     data = json.loads(request.body)
 
@@ -283,7 +297,7 @@ def edit_charge(request):
     
     return render (request,'charge.html',{'user_charge': user.charge})
 
-@login_required
+@login_required(login_url='login')
 def logout(request):
     logout_auth(request)
 

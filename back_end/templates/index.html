@@ -17,6 +17,7 @@
     <script src="{% static 'js/main.js' %}"></script>
     <script>
     $(document).ready(function () {
+
         $(".product-item-buy").click(function (e) {
             document.getElementById("modal-buy-product").style.display = "block";
             price = e.target.id
@@ -42,7 +43,7 @@
                             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                         },
                         success: function (response) {
-                            
+
                             $("#modal-content-buy-product").html(response)
                         },
                     });
@@ -50,6 +51,11 @@
         });
 
     });
+       
+    $(".close").click(function (e){
+            let modal = document.getElementById("modal-buy-product");
+            modal.style.display = "none";
+             });
 });
 
     function search(event) {
@@ -91,19 +97,34 @@
             <div class="menu-item">پشتیبانی</div>
             <div class="menu-item">تماس با ما</div>
         </div>
+        {% if login == False %}
         <div id="menu-user">
             <div id="menu-user-button" class="unauthorized">
+                <a href="/login">
                 ورود / ثبت نام
+                </a>
             </div>
-            <div style="display: none" id="menu-user-dropdown" class="menu-dropdown">
+        </div> 
+        {% endif %}   
+        {% if login == True %}
+        <div id="menu-user">
+            <div id="menu-user-dropdown" class="menu-dropdown">
                 <div id="dropdown-sign">⌵</div>
-                شیرین عبادی
+                <div id="user-full-name">{{user_f_name}}</div>
             </div>
-            <div style="display: none" class="dropdown-content">
-                <a id="dropdown-profile" href="javascript:void(0)">پروفایل</a>
-                <a href="javascript:void(0)">خروج</a>
+            <div class="dropdown-content">
+                {% if admin == True %}
+                <a id="dropdown-profile" href="/admin">پروفایل</a>
+                {% endif %}
+
+                {% if admin == False %}
+                <a id="dropdown-profile" href="/profile">پروفایل</a>
+                {% endif %}
+
+                <a id = "log_out" href="/logout">خروج</a>
             </div>
         </div>
+        {% endif %}  
     </div>
     <div id="contents">
         <div class="hero-header slider-img" style="background-image: url('/static/img/1.jpg')">
@@ -274,7 +295,7 @@
     <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
     <div id="modal-buy-product" class="modal">
         <div id="modal-content-buy-product" class="modal-content">
-            <button class="close" onclick="exec()">&times;</button>
+            <button class="close">&times;</button>
             <form id="buy_product_form" method="POST">
                 {% csrf_token %}
                 <input id= "p_count" type="number" name="p_count">
