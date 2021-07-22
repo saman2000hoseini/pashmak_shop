@@ -8,7 +8,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.core import serializers
 from django.contrib.auth.models import User as UserAuth
-from django.contrib.auth import authenticate, login as login_auth
+from django.contrib.auth import authenticate, login as login_auth, logout as logout_auth
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
@@ -176,7 +176,6 @@ def profile(request):
 
 def login(request):
     if request.method == "POST":
-        print("inja")
         user_email = request.POST.get('email')
         user_password = request.POST.get('password')
         user_auth = authenticate(request, username=user_email, password=user_password)
@@ -217,6 +216,8 @@ def register(request):
             user.save()
             user_auth = UserAuth.objects.create_user(username=email, password=password)
             user_auth.save()
+            response = redirect('/profile')
+            return response
 
     return render(request, 'register.html')
 
@@ -229,7 +230,7 @@ def get_user(request):
         return JsonResponse({'users': users})
 
 
-@login_required(login_url='login')
+@login_required(login_url='login_req')
 def product_buy(request):
     print("hi")
 
@@ -255,3 +256,39 @@ def product_buy(request):
         else:
             return render (request,'result.html',{'content': "Failed :(((("})
 
+@login_required
+def edit_profile(request):
+    data = json.loads(request.body)
+
+    user = User.objects.get(email = request.user.username)
+    user.f_name = data['edited_f_name']
+    user.s_name = data['edited_s_name']
+    user.address = data['edited_address']
+    user.password = data['edited_password']
+    user.save()
+
+    user_auth = UserAuth.objects.get(username = request.user.username)
+    user_auth.set_password(data['edited_password'])
+    user_auth.save()
+
+    return render (request,'result.html',{'content': "Changed Happily!!"})
+
+@login_required
+def edit_charge(request):
+    data = json.loads(request.body)
+
+    user = User.objects.get(email = request.user.username)
+    user.charge = data['edited_charge']
+    user.save()
+    
+    return render (request,'charge.html',{'user_charge': user.charge})
+
+@login_required
+def logout(request):
+    logout_auth(request)
+
+    response= redirect('/')
+    return response
+
+def login_req(request):
+    return render(request,'login_req.html')

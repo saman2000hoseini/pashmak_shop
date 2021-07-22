@@ -13,6 +13,56 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>$(document).ready(function () {
 
+        $("#modify").click(function (e) {
+            let edited_f_name = document.getElementById('name').value
+            let edited_s_name = document.getElementById('family').value
+            let edited_address = document.getElementById('address').value
+            let edited_password = document.getElementById('password').value
+
+            $.ajax({
+                    type: 'POST',
+                    url: "{% url 'edit_profile' %}",
+                    data:
+                        JSON.stringify({
+                            edited_f_name: edited_f_name,
+                            edited_s_name: edited_s_name,
+                            edited_address: edited_address,
+                            edited_password: edited_password,
+                        }),
+
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        $("#message").html(response)
+                    },
+                });
+        });
+        $("#profile-increase-credit").click(function (e) {
+            console.log('hi')
+            document.getElementById('edit_charge').style.display = "block";
+
+            $(".p_submit").click(function (e) {
+                e.preventDefault();
+                let edited_charge = document.getElementById('charge').value;
+                $.ajax({
+                        type: 'POST',
+                        url: "{% url 'edit_charge' %}",
+                        data:
+                            JSON.stringify({
+                                edited_charge : edited_charge
+                            }),
+
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                        success: function (response) {
+                            $("#credit_content").html(response)
+                        },
+                    });
+                    document.getElementById('edit_charge').style.display = "none";
+                });
+        });
     });</script>
 </head>
 <body id="user-panel">
@@ -34,8 +84,8 @@
                 <div id="user-full-name">{{user_f_name}}</div>
             </div>
             <div class="dropdown-content">
-                <a id="dropdown-profile" href="javascript:void(0)">پروفایل</a>
-                <a href="javascript:void(0)">خروج</a>
+                <a id="dropdown-profile" href="/profile">پروفایل</a>
+                <a id = "log_out" href="/logout">خروج</a>
             </div>
         </div>
     </div>
@@ -47,7 +97,7 @@
                 </div>
                 <div class="profile-item">عزیز، خوش آمدید.</div>
                 <div class="profile-item profile-tab tab-content">موجودی حساب شما:</div>
-                <div class="profile-item profile-tab tab-content">
+                <div id = "credit_content" class="profile-item profile-tab tab-content">
                     {{user_charge}}
                 </div>
                 <button id="profile-increase-credit" class="awesome-button profile-tab tab-content">افزایش موجودی
@@ -60,30 +110,39 @@
             </div>
         </div>
         <div id="profile" class="user-panel-contents tab-content profile-tab">
-            <div id="profile-items">
-                <div class="user-panel-item">
-                    <label for="name" class="user-panel-label">نام</label>
-                    <input id="name" class="user-panel-input persian-text" type="text"
-                           placeholder="نام خود را وارد کنید">
+            <form class="edit_profile", method="POST">
+                {% csrf_token %}
+                <div id="profile-items">
+                    <div class="user-panel-item">
+                        <label for="name" class="user-panel-label">نام</label>
+                        <input id="name" class="user-panel-input persian-text" type="text"
+                            placeholder="نام خود را وارد کنید">
+                    </div>
+                    <div class="user-panel-item">
+                        <label for="family" class="user-panel-label">نام خانوادگی</label>
+                        <input id="family" class="user-panel-input persian-text" type="text"
+                            placeholder="نام خانوادگی خود را وارد کنید">
+                    </div>
+                    <div id="profile-password" class="user-panel-item">
+                        <label for="password" class="user-panel-label">رمز عبور</label>
+                        <input id="password" class="user-panel-input english-text" type="password" placeholder="password"
+                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                    </div>
+                    <div id="user-panel-address" class="user-panel-item">
+                        <label id="address-label" for="address" class="user-panel-label">آدرس</label>
+                        <textarea id="address" class="user-panel-input persian-text"
+                                placeholder="آدرس خود را وارد کنید"></textarea>
+                    </div>
+                    <div id="message"></div>
                 </div>
-                <div class="user-panel-item">
-                    <label for="family" class="user-panel-label">نام خانوادگی</label>
-                    <input id="family" class="user-panel-input persian-text" type="text"
-                           placeholder="نام خانوادگی خود را وارد کنید">
-                </div>
-                <div id="profile-password" class="user-panel-item">
-                    <label for="password" class="user-panel-label">رمز عبور</label>
-                    <input id="password" class="user-panel-input english-text" type="password" placeholder="password"
-                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
-                </div>
-                <div id="user-panel-address" class="user-panel-item">
-                    <label id="address-label" for="address" class="user-panel-label">آدرس</label>
-                    <textarea id="address" class="user-panel-input persian-text"
-                              placeholder="آدرس خود را وارد کنید"></textarea>
-                </div>
-                <div id="message"></div>
-            </div>
+            
         </div>
+                    <div id="user-panel-button-container" class="tab-content profile-tab">
+                        <div id="user-panel-button">
+                            <button id="modify" class="awesome-button">ویرایش اطلاعات</button>
+                        </div>
+                    </div>
+            </form>
         <div id="receipts" class="user-panel-contents receipt-tab tab-content">
             <table id="receipt-rows">
                 <tr class="receipt-row">
@@ -104,16 +163,19 @@
                 {%endfor%}
             </table>
         </div>
-        <div id="user-panel-button-container" class="tab-content profile-tab">
-            <div id="user-panel-button">
-                <button id="modify" class="awesome-button">ویرایش اطلاعات</button>
-            </div>
-        </div>
     </div>
     <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
     <div id="modal-container" class="modal">
-        <div id="modal-content">
+        <div id="modal-content" class="modal-content">
             <button class="close">&times;</button>
+        </div>
+    </div>
+
+    <div id="edit_charge" class="modal">
+        <div id="edit_charge-content" class="modal-content">
+            <button class="close">&times;</button>
+            <input id= "charge" type="number" name="charge">
+            <button class="p_submit">SUBMIT</buton>
         </div>
     </div>
 </div>

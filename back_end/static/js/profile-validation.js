@@ -98,10 +98,10 @@ function validate(event) {
 }
 
 let btn = document.getElementsByClassName("awesome-button")[1];
-let close_btn = document.getElementsByClassName("close")[0];
+let closes_btn = document.getElementsByClassName("close")[0];
 
 btn.addEventListener("click",modalEvent);
-close_btn.addEventListener("click",exec);
+closes_btn.addEventListener("click",exec);
 
 function modalEvent(event){
 
