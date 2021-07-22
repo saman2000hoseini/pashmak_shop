@@ -1,11 +1,3 @@
-window.onload = function () {
-    setActive();
-}
-const urlParams = new URLSearchParams(window.location.search);
-const sortBy = urlParams.get('f_sort');
-console.log(sortBy)
-
-
 function toPrice(price) {
     return price.toString().replace(/(.)(?=(.{3})+$)/g, "$1,");
 }
@@ -33,24 +25,4 @@ function sortProducts(page) {
     let higher_price = getHigherPriceBound()
 
     window.location.replace(`http://localhost:8000?f_sort=${f_sort}&s_sort=${s_sort.join(',')}&lower_price=${lower_price}&higher_price=${higher_price}&page=${page}`);
-}
-
-function setActive() {
-    let sortItems = document.getElementsByClassName("sort-item-input");
-
-    if (sortBy == null || sortBy === "") {
-        sortItems[0].checked = true;
-        return;
-    }
-
-    for (let i = 0; i < sortItems.length; i++) {
-        sortItems[i].checked = false;
-    }
-
-    console.log(sortBy)
-
-    for (let i = 0; i < sortItems.length; i++) {
-        if (sortItems[i].value === sortBy)
-            sortItems[i].checked = true;
-    }
 }

@@ -43,7 +43,7 @@ def index(request):
     categories = Category.objects.all()
 
     return render(request, 'index.html',
-                  {'products_list': paged_products, 'categories_list': categories})
+                  {'products_list': paged_products, 'categories_list': categories, 'sortBy': f_sort})
 
 
 def admin(request):

@@ -146,29 +146,59 @@
             </div>
             <button id="hero-header-button4" class="awesome-button">جستجو</button>
         </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/5.png')">
+            <div id="hero-header-title5" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input persian-text" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button5" class="awesome-button">جستجو</button>
+        </div>
 
         <div id="product-items-container">
             <div id="sort-items-container">
                 <div id="sort-title-item">مرتب سازی بر اساس:</div>
                 <ul id="sort-items-list">
                     <li class="sort-item">
+                        {% if sortBy == "-added_date" or sortBy is None %}
+                        <input type='radio' value='-added_date' checked name='sort_products' id='radio-last'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
                         <input type='radio' value='-added_date' name='sort_products' id='radio-last'
                                class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
                         <label for='radio-last' class="sort-item-button">آخرین محصولات</label>
                     </li>
                     <li class="sort-item">
+                        {% if sortBy == "sold" %}
+                        <input type='radio' value='sold' checked name='sort_products' id='radio-best-sell'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
                         <input type='radio' value='sold' name='sort_products' id='radio-best-sell'
                                class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
                         <label for='radio-best-sell' class="sort-item-button">بیشترین فروش</label>
                     </li>
                     <li class="sort-item">
-                        <input type='radio' value='-price' name='sort_products' id='radio-highest-price'
+                        {% if sortBy == "-price" %}
+                        <input type='radio' value='-price' checked name='sort_products' id='radio-highest-price'
                                class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
+                         <input type='radio' value='-price' name='sort_products' id='radio-highest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
                         <label for='radio-highest-price' class="sort-item-button">بیشترین قیمت</label>
                     </li>
                     <li class="sort-item">
+                        {% if sortBy == "price" %}
+                        <input type='radio' value='price' checked name='sort_products' id='radio-lowest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
                         <input type='radio' value='price' name='sort_products' id='radio-lowest-price'
                                class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
                         <label for='radio-lowest-price' class="sort-item-button">کمترین قیمت</label>
                     </li>
                 </ul>
