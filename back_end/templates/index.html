@@ -1,0 +1,356 @@
+{% load static %}
+{% static "img/sample"  as baseurl%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pashmak Shop</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/range-slider.css' %}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="{% static 'js/range_slider.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+
+            $(".product-item-buy").click(function (e) {
+                document.getElementById("modal-buy-product").style.display = "block";
+                price = e.target.id
+                id = e.target.value
+
+                $(".p_submit").click(function (e) {
+                    e.preventDefault();
+                    count = document.getElementById("p_count").value
+                    total_price = count * parseInt(price)
+                    console.log(total_price)
+                    document.getElementById("total_price").innerHTML = `TOTAL PRICE: ${total_price}`
+                    document.getElementById("total_price").style.display = "block"
+                    $(".p_submit").click(function (e) {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{% url 'product_buy' %}",
+                            data:
+                                JSON.stringify({
+                                    id: id,
+                                    count: count
+                                }),
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                            },
+                            success: function (response) {
+
+                                $("#modal-content-buy-product").html(response)
+                            },
+                        });
+                    })
+                });
+
+            });
+
+            $(".close").click(function (e) {
+                let modal = document.getElementById("modal-buy-product");
+                modal.style.display = "none";
+            });
+        });
+
+        function search(event) {
+            if (event.keyCode === 13) {
+                let product_name = event.target.value;
+                console.log(product_name)
+                $.ajax({
+                    type: 'POST',
+                    url: "{% url 'product_search' %}",
+                    data:
+                        JSON.stringify({
+                            search: product_name
+                        }),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        $("#products").html(response)
+                    },
+                });
+            }
+        }
+
+        function sortProducts(page) {
+            let f_sort = null;
+            let f_elements = document.getElementsByClassName('sort-item-input');
+            for (let i = 0; i < f_elements.length; i++) {
+                if (f_elements[i].checked === true) {
+                    f_sort = f_elements[i].value
+                    console.log(i)
+                }
+            }
+
+            let s_sort = []
+            let s_elements = document.getElementsByClassName('filter-products-checkbox');
+
+            for (let i = 0; i < s_elements.length; i++) {
+                if (s_elements[i].checked === true) {
+                    s_sort.push(s_elements[i].value)
+                }
+            }
+
+            let lower_price = getLowerPriceBound()
+            let higher_price = getHigherPriceBound()
+            window.location.replace(`http://localhost:8000?f_sort=${f_sort}&s_sort=${s_sort.join(',')}&lower_price=${lower_price}&higher_price=${higher_price}&page=${page}`);
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'product_sort' %}",
+                data:
+                    JSON.stringify({
+                        page: page,
+                        f_sort: f_sort,
+                        s_sort: s_sort,
+                        lower_price: lower_price,
+                        higher_price: higher_price
+                    }),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function (response) {
+                    $("#products").html(response)
+                },
+            });
+        }
+
+    </script>
+</head>
+<body>
+<div id="main-window">
+    <div id="main-menu">
+        <div id="menu-items">
+            <div id="menu-shop-item" class="menu-item">
+                <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
+                <div>پشمک شاپ</div>
+            </div>
+            <a href="/">
+                <div class="menu-item">صفحه اصلی</div>
+            </a>
+            <a href="/#product-items-container">
+                <div class="menu-item">محصولات</div>
+            </a>
+            <div class="menu-item">پشتیبانی</div>
+            <div class="menu-item">تماس با ما</div>
+        </div>
+        {% if login == False %}
+        <div id="menu-user">
+            <a href="/login">
+                <div id="menu-user-button" class="unauthorized">
+                    ورود / ثبت نام
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        {% if login == True %}
+        <div id="menu-user">
+            <div id="menu-user-dropdown" class="menu-dropdown">
+                <div id="dropdown-sign">⌵</div>
+                <div id="user-full-name">{{user_f_name}}</div>
+            </div>
+            <div class="dropdown-content">
+                {% if admin == True %}
+                <a id="dropdown-profile" href="/admin">پروفایل</a>
+                {% endif %}
+
+                {% if admin == False %}
+                <a id="dropdown-profile" href="/profile">پروفایل</a>
+                {% endif %}
+
+                <a id="log_out" href="/logout">خروج</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div id="contents">
+        <div class="hero-header slider-img" style="background-image: url('/static/img/1.jpg')">
+            <div id="hero-header-title1" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button1" class="awesome-button">جستجو</button>
+        </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/2.jpg')">
+            <div id="hero-header-title2" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button2" class="awesome-button">جستجو</button>
+        </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/3.png')">
+            <div id="hero-header-title3" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button3" class="awesome-button">جستجو</button>
+        </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/4.jpg')">
+            <div id="hero-header-title4" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button4" class="awesome-button">جستجو</button>
+        </div>
+        <div class="hero-header slider-img" style="background-image: url('/static/img/5.png')">
+            <div id="hero-header-title5" class="awesome-title">در محصولات سایت جستجو کنید</div>
+            <input class="hero-header-input" onkeypress="search(event,id)"
+                   placeholder="نام محصول خود را وارد کنید"/>
+            <div class="slideshow-control">
+                <a class="prev" onclick="buttonSlides(-1)">&#10094;</a>
+                <a class="next" onclick="buttonSlides(1)">&#10095;</a>
+            </div>
+            <button id="hero-header-button5" class="awesome-button">جستجو</button>
+        </div>
+
+        <div id="product-items-container">
+            <div id="sort-items-container">
+                <div id="sort-title-item">مرتب سازی بر اساس:</div>
+                <ul id="sort-items-list">
+                    <li class="sort-item">
+                        {% if sortBy == "-added_date" or sortBy is None %}
+                        <input type='radio' value='-added_date' checked name='sort_products' id='radio-last'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
+                        <input type='radio' value='-added_date' name='sort_products' id='radio-last'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
+                        <label for='radio-last' class="sort-item-button">آخرین محصولات</label>
+                    </li>
+                    <li class="sort-item">
+                        {% if sortBy == "sold" %}
+                        <input type='radio' value='sold' checked name='sort_products' id='radio-best-sell'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
+                        <input type='radio' value='sold' name='sort_products' id='radio-best-sell'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
+                        <label for='radio-best-sell' class="sort-item-button">بیشترین فروش</label>
+                    </li>
+                    <li class="sort-item">
+                        {% if sortBy == "-price" %}
+                        <input type='radio' value='-price' checked name='sort_products' id='radio-highest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
+                        <input type='radio' value='-price' name='sort_products' id='radio-highest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
+                        <label for='radio-highest-price' class="sort-item-button">بیشترین قیمت</label>
+                    </li>
+                    <li class="sort-item">
+                        {% if sortBy == "price" %}
+                        <input type='radio' value='price' checked name='sort_products' id='radio-lowest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% else %}
+                        <input type='radio' value='price' name='sort_products' id='radio-lowest-price'
+                               class="sort-item-input" onchange="sortProducts()"/>
+                        {% endif %}
+                        <label for='radio-lowest-price' class="sort-item-button">کمترین قیمت</label>
+                    </li>
+                </ul>
+            </div>
+            <div id="product-items">
+                <div id="filter-container">
+                    <div class="filter-products">
+                        <div class="filter-products-content filter-products-title">دسته بندی‌ها</div>
+                        {% for category in categories_list %}
+                        <label class="filter-products-content">
+                            <input type="checkbox" value="{{category.c_name}}" onchange="sortProducts()"
+                                   class="filter-products-checkbox">
+                            {{category.c_name}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="filter-products">
+                        <div class="filter-products-content filter-products-title">محدوده قیمت</div>
+                        <div id="price-range-container">
+                            <div id="slider-range" class="slider"></div>
+                            <div id="range-slider-price-container">
+                                <label for="min-range" class="value">از</label>
+                                <input disabled readonly onchange="sortProducts()" type="text" id="min-range"
+                                       class="value">
+                                <label for="max-range" class="value">تا</label>
+                                <input disabled readonly onchange="sortProducts()" type="text" id="max-range"
+                                       class="value">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="products">
+                    <div id="result"></div>
+                    {% for product in products_list%}
+                    <div class="product-item">
+                        <div class="product-item-container">
+                            <img class="product-item-image" src="{{baseurl}}/{{product.img}}">
+                            <label class="product-item-name">{{product.p_name}}</label>
+                            <label class="product-item-group">{{product.category}}</label>
+                            <div class="price-actions">
+                                <label class="product-item-price">{{product.price}} تومان </label>
+                                <button class="product-item-buy" id={{product.price}} value="{{product.id}}">خرید
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if products_list.has_other_pages %}
+                <div id="paginator">
+                    {% if products_list.has_previous %}
+                    <button class="paginator-button" onclick="sortProducts('{{products_list.previous_page_number}}')">
+                        قبل
+                    </button>
+                    {% else %}
+                    <button disabled class="paginator-button">قبل</button>
+                    {% endif %}
+                    {% for i in products_list.paginator.page_range %}
+                    {% if products_list.number == i %}
+                    <button class="paginator-button active-paginator">{{i}}</button>
+                    {% else %}
+                    <button class="paginator-button" onclick="sortProducts('{{i}}')">{{i}}</button>
+                    {% endif %}
+                    {% endfor %}
+                    {% if products_list.has_next %}
+                    <button class="paginator-button" onclick="sortProducts('{{products_list.next_page_number}}')">بعد
+                    </button>
+                    {% else %}
+                    <button class="paginator-button" disabled>بعد</button>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+    <div id="modal-buy-product" class="modal">
+        <div id="modal-content-buy-product" class="modal-content">
+            <button class="close">&times;</button>
+            <form id="buy_product_form" method="POST">
+                {% csrf_token %}
+                <input id="p_count" type="number" name="p_count">
+                <label id="total_price" style="display: none;"></label>
+                <button class="p_submit" style="margin: 10px;">Buy</button>
+            </form>
+        </div>
+    </div>
+    <div id="notifier" class="notify"><span id="notifyType" class=""></span></div>
+    <script src="{% static 'js/background-slider.js' %}"></script>
+</body>
+</html>

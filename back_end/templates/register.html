@@ -1,0 +1,90 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ثبت نام | فروشگاه اینترنتی پشمک شاپ</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body id="user-panel">
+<div id="main-window">
+    <div id="main-menu">
+        <div id="menu-items">
+            <div id="menu-shop-item" class="menu-item">
+                <img id="menu-shop-logo-item" src="{% static 'img/logo.png' %}" alt="لوگو">
+                <div>پشمک شاپ</div>
+            </div>
+            <a href="/">
+                <div class="menu-item">صفحه اصلی</div>
+            </a>
+            <a href="/#product-items-container">
+                <div class="menu-item">محصولات</div>
+            </a>
+            <div class="menu-item">پشتیبانی</div>
+            <div class="menu-item">تماس با ما</div>
+        </div>
+        <div id="menu-user">
+            <a href="/login">
+                <div id="menu-user-button" class="unauthorized">
+                    ورود / ثبت نام
+                </div>
+            </a>
+        </div>
+    </div>
+    <form id="user-panel-container" action="register" method="POST">
+        <div id="panel-header" class="awesome-title">
+            <div>
+                فروشگاه - ثبت نام
+            </div>
+        </div>
+        <div id="user-panel-register" class="user-panel-contents">
+            <div class="user-panel-item">
+                {% csrf_token %}
+                <label for="name" class="user-panel-label">نام</label>
+                <input id="name" name="f_name" class="user-panel-input persian-text" type="text"
+                       placeholder="نام خود را وارد کنید">
+            </div>
+            <div class="user-panel-item">
+                <label for="family" class="user-panel-label">نام خانوادگی</label>
+                <input id="family" name="s_name" class="user-panel-input persian-text" type="text"
+                       placeholder="نام خانوادگی خود را وارد کنید">
+            </div>
+            <div class="user-panel-item">
+                <label for="email" class="user-panel-label">ایمیل</label>
+                <input id="email" name="email" class="user-panel-input english-text" type="email"
+                       placeholder="example@pashmak.com"
+                       pattern='^\s*(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))\s*$'>
+            </div>
+            <div class="user-panel-item">
+                <label for="password" class="user-panel-label">رمز عبور</label>
+                <input id="password" name="password" class="user-panel-input english-text" type="password"
+                       placeholder="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+            </div>
+            <div id="user-panel-address" class="user-panel-item">
+                <label id="address-label" for="address" class="user-panel-label">آدرس</label>
+                <textarea id="address" name="address" class="user-panel-input persian-text"
+                          placeholder="آدرس خود را وارد کنید">
+                    </textarea>
+            </div>
+            <div id="message"></div>
+        </div>
+        <div id="user-panel-button">
+            <button id="submit" class="awesome-button">ثبت نام</button>
+        </div>
+    </form>
+    <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+    <div id="modal-container" class="modal">
+        <div id="modal-content" class="modal-content">
+            <button class="close">&times;</button>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/register-validation.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<script>$(document).ready(function () {
+$(".product-item-buy").click(function (e){
+    id = e.target.id
+    console.log(id)
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'product_buy' %}",
+        data:
+            JSON.stringify({
+                id:id,
+            }),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function (response) {
+            $("#main-window").html(response)
+        },
+    });
+
+});
+});
+</script>
+<div id="products">
+{% for product in products_list%}
+<div class="product-item">
+    <div class="product-item-container">
+        <img class="product-item-image" src="{%static 'img/sample/razer2.png' %}">
+        <label class="product-item-name">{{product.p_name}}</label>
+        <label class="product-item-group">{{product.category}}</label>
+        <div class="price-actions">
+            <label class="product-item-price">{{product.price}} تومان </label>
+            <button class="product-item-buy">خرید</button>
+        </div>
+    </div>
+</div>
+{% endfor %}  
+</div> 
+<div class = "paginator-buttons">
+    <button  class="paginator-button" onclick="product_sort('prv')">قبل</button> 
+    {% for i in page_list %}
+    <button  class="paginator-button" onclick="product_sort('{{i}}')">{{i}}</button> 
+    {% endfor %}  
+    <button class="paginator-button" onclick="product_sort('nxt')">بعد</button> 
+</div> 

@@ -8,6 +8,7 @@
   <link href="css/main.css" rel="stylesheet">
   <link href="css/responsive.css" rel="stylesheet">
   <link href="css/user-panel.css" rel="stylesheet">
+ 
 </head>
 <body id="user-panel">
 <div id="main-window">
@@ -56,12 +57,19 @@
         <textarea id="address" class="user-panel-input persian-text" placeholder="آدرس خود را وارد کنید">
         </textarea>
       </div>
+	  <div id="message"></div>
     </div>
     <div id="user-panel-button">
-      <button class="awesome-button">ثبت نام</button>
+      <button id= "submit" class="awesome-button">ثبت نام</button>
     </div>
   </div>
   <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+  <div id="modal-container" class="modal">
+		<div id="modal-content">
+			<button class="close" >&times;</button>
+		</div>
+   </div>
 </div>
+ <script src="js/register-validation.js"></script>
 </body>
 </html>

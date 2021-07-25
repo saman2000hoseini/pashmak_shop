@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>   
+    
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
+</head>    
+
+<body>
+<div style="color: cornflowerblue; margin-left: 20px;">You Need to Login First</div>
+<p style="margin-right:60px;">
+    <div id="button" class="unauthorized">
+        <a href = "/login" >
+        ورود / ثبت نام
+        </a>
+    </div>
+</p>
+</body>
+</html>

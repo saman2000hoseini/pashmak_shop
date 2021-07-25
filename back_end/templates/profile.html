@@ -1,0 +1,184 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>فضای کاربری</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/icon type">
+    <link href="{% static 'css/font.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/user-panel.css' %}" rel="stylesheet">
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>$(document).ready(function () {
+
+        $("#modify").click(function (e) {
+            let edited_f_name = document.getElementById('name').value
+            let edited_s_name = document.getElementById('family').value
+            let edited_address = document.getElementById('address').value
+            let edited_password = document.getElementById('password').value
+
+            $.ajax({
+                    type: 'POST',
+                    url: "{% url 'edit_profile' %}",
+                    data:
+                        JSON.stringify({
+                            edited_f_name: edited_f_name,
+                            edited_s_name: edited_s_name,
+                            edited_address: edited_address,
+                            edited_password: edited_password,
+                        }),
+
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                    },
+                    success: function (response) {
+                        $("#message").html(response)
+                    },
+                });
+        });
+        $("#profile-increase-credit").click(function (e) {
+            console.log('hi')
+            document.getElementById('edit_charge').style.display = "block";
+
+            $(".p_submit").click(function (e) {
+                e.preventDefault();
+                let edited_charge = document.getElementById('charge').value;
+                $.ajax({
+                        type: 'POST',
+                        url: "{% url 'edit_charge' %}",
+                        data:
+                            JSON.stringify({
+                                edited_charge : edited_charge
+                            }),
+
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                        },
+                        success: function (response) {
+                            $("#credit_content").html(response)
+                        },
+                    });
+                    document.getElementById('edit_charge').style.display = "none";
+                });
+        });
+    });</script>
+</head>
+<body id="user-panel">
+<div id="main-window">
+    <div id="main-menu">
+        <div id="menu-items">
+            <div id="menu-shop-item" class="menu-item">
+                <img id="menu-shop-logo-item" src="img/logo.png" alt="لوگو">
+                <div>پشمک شاپ</div>
+            </div>
+            <div class="menu-item"><a href="/">صفحه اصلی</a></div>
+            <div class="menu-item"><a href="/#product-items-container"> محصولات</a></div>
+            <div class="menu-item">پشتیبانی</div>
+            <div class="menu-item">تماس با ما</div>
+        </div>
+        <div id="menu-user">
+            <div id="menu-user-dropdown" class="menu-dropdown">
+                <div id="dropdown-sign">⌵</div>
+                <div id="user-full-name">{{user_f_name}}</div>
+            </div>
+            <div class="dropdown-content">
+                <a id="dropdown-profile" href="/profile">پروفایل</a>
+                <a id = "log_out" href="/logout">خروج</a>
+            </div>
+        </div>
+    </div>
+    <div id="user-panel-container">
+        <div id="panel-header" class="awesome-title">
+            <div id="profile-container">
+                <div id="user-name" class="profile-item">
+                {{user_f_name}}
+                </div>
+                <div class="profile-item">عزیز، خوش آمدید.</div>
+                <div class="profile-item profile-tab tab-content">موجودی حساب شما:</div>
+                <div id = "credit_content" class="profile-item profile-tab tab-content">
+                    {{user_charge}}
+                </div>
+                <button id="profile-increase-credit" class="awesome-button profile-tab tab-content">افزایش موجودی
+                </button>
+            </div>
+            <div class="tab">
+                <button id="profile-tab" class="tablinks active" onclick="switchTab(this, 'profile-tab')">پروفایل
+                </button>
+                <button id="receipts-tab" class="tablinks" onclick="switchTab(this, 'receipt-tab')">رسیدها</button>
+            </div>
+        </div>
+        <div id="profile" class="user-panel-contents tab-content profile-tab">
+            <form class="edit_profile", method="POST">
+                {% csrf_token %}
+                <div id="profile-items">
+                    <div class="user-panel-item">
+                        <label for="name" class="user-panel-label">نام</label>
+                        <input id="name" class="user-panel-input persian-text" type="text"
+                            placeholder="نام خود را وارد کنید">
+                    </div>
+                    <div class="user-panel-item">
+                        <label for="family" class="user-panel-label">نام خانوادگی</label>
+                        <input id="family" class="user-panel-input persian-text" type="text"
+                            placeholder="نام خانوادگی خود را وارد کنید">
+                    </div>
+                    <div id="profile-password" class="user-panel-item">
+                        <label for="password" class="user-panel-label">رمز عبور</label>
+                        <input id="password" class="user-panel-input english-text" type="password" placeholder="password"
+                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                    </div>
+                    <div id="user-panel-address" class="user-panel-item">
+                        <label id="address-label" for="address" class="user-panel-label">آدرس</label>
+                        <textarea id="address" class="user-panel-input persian-text"
+                                placeholder="آدرس خود را وارد کنید"></textarea>
+                    </div>
+                    <div id="message"></div>
+                </div>
+            
+        </div>
+                    <div id="user-panel-button-container" class="tab-content profile-tab">
+                        <div id="user-panel-button">
+                            <button id="modify" class="awesome-button">ویرایش اطلاعات</button>
+                        </div>
+                    </div>
+            </form>
+        <div id="receipts" class="user-panel-contents receipt-tab tab-content">
+            <table id="receipt-rows">
+                <tr class="receipt-row">
+                    <th>تاریخ</th>
+                    <th>کد پیگیری</th>
+                    <th>کالا</th>
+                    <th>هزینه پرداختی</th>
+                    <th>آدرس</th>
+                </tr>
+                {% for r in receipts %}
+                <tr class="receipt-row">
+                    <th>{{r.date}}</th>
+                    <th>{{r.id}}</th>
+                    <th>{{r.p_name}}</th>
+                    <th>{{r.price}}</th>
+                    <th>{{r.address}}</th>
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+    </div>
+    <div id="footer">تمامی حقوق برای توسعه دهندگان، شیرین عبادی و سامان حسینی، محفوظ است.</div>
+    <div id="modal-container" class="modal">
+        <div id="modal-content" class="modal-content">
+            <button class="close">&times;</button>
+        </div>
+    </div>
+
+    <div id="edit_charge" class="modal">
+        <div id="edit_charge-content" class="modal-content">
+            <button class="close">&times;</button>
+            <input id= "charge" type="number" name="charge">
+            <button class="p_submit">SUBMIT</buton>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/profile-validation.js' %}"></script>
+</body>
+</html>
